@@ -11,7 +11,7 @@ class DashboardPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Buenos días, José! ☀️'),
+          title: Text('Buen día, José! ☀️'),
         ),
         drawer: _buildDrawer(context),
         body: SingleChildScrollView(
