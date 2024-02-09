@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/dashboard.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,13 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
           return false;
         },
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 60.0), // Agrega un margen al fondo
+          padding: const EdgeInsets.only(bottom: 60.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _buildImageGrid(), // Agrega la cuadrícula de imágenes
-                Spacer(), // Espaciador flexible que empujará el botón hacia abajo
+                _buildImageGrid(),
+                Spacer(),
                 ElevatedButton(
                   onPressed: () {
                     // Navigate to the login page
@@ -55,7 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
-                  child: const Text('Iniciar Sesión'),
+                  child: Text('Iniciar Sesión',
+                      style: GoogleFonts.montserrat(color: Colors.black)),
                 ),
               ],
             ),
@@ -69,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(), // Evita el desplazamiento del GridView
+      physics: NeverScrollableScrollPhysics(),
       children: [
         _buildImage('lib/assets/img/logoanahuac.png'),
         _buildImage('lib/assets/img/logoanahuac.png'),
@@ -106,7 +108,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Iniciar Sesión'),
+        title: Text('Iniciar Sesión', style: GoogleFonts.montserrat()),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -118,12 +121,11 @@ class LoginPage extends StatelessWidget {
                 // Image from assets
                 Image.asset(
                   'lib/assets/img/bamx_logo.png',
-                  height: 100.0, // Adjust the height as needed
+                  height: 100.0, // Ajusta la altura según sea necesario
                 ),
                 const SizedBox(height: 20.0),
-                const Text(
-                  'Ingresa tus datos',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                Text(
+                  'Ingresa tus datos', style: GoogleFonts.montserrat()
                 ),
                 const SizedBox(height: 20.0),
                 // Username TextField
@@ -131,17 +133,19 @@ class LoginPage extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Usuario',
                     border: OutlineInputBorder(),
+                    labelStyle: GoogleFonts.montserrat(),
                   ),
                 ),
                 const SizedBox(height: 12.0),
-                // Password TextField
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Contraseña',
                     border: OutlineInputBorder(),
+                    labelStyle: GoogleFonts.montserrat(),
                   ),
                 ),
+
                 const SizedBox(height: 20.0),
                 // Login Button
                 ElevatedButton(
@@ -151,13 +155,16 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => DashboardPage()),
                     );
                   },
-                  child: const Text('Acceder'),
+                  child: Text('Acceder',
+                      style: GoogleFonts.montserrat(color: Colors.black)),
                 ),
+                const SizedBox(height: 10.0),
                 ElevatedButton(
                   onPressed: () {
-                    // Add logic for requesting access
+                    // Agregar lógica para solicitar acceso
                   },
-                  child: const Text('Solicitar acceso'),
+                  child: Text('Solicitar acceso',
+                      style: GoogleFonts.montserrat(color: Colors.black)),
                 ),
               ],
             ),
@@ -167,3 +174,4 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
