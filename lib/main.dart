@@ -31,34 +31,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the login page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: const Text('Iniciar Sesión'),
+      body: WillPopScope(
+        onWillPop: () async {
+          // Evitar que el usuario pueda regresar a la página anterior
+          return false;
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 60.0), // Agrega un margen al fondo
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildImageGrid(), // Agrega la cuadrícula de imágenes
+                Spacer(), // Espaciador flexible que empujará el botón hacia abajo
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to the login page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: const Text('Iniciar Sesión'),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _buildImageGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(), // Evita el desplazamiento del GridView
+      children: [
+        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/logoanahuac.png'),
+      ],
+    );
+  }
+
+  Widget _buildImage(String imagePath) {
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            imagePath,
+            height: 100.0,
+            width: 100.0,
+            fit: BoxFit.cover,
+          ),
+        ],
+      ),
+    );
+  }
+
 }
+
 
 
 class LoginPage extends StatelessWidget {
@@ -127,6 +167,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-
-
