@@ -24,3 +24,5 @@ flutter:
   assets:
     - lib/assets/img/bamx_logo.png
     - lib/assets/img/logoanahuac.png
+    - lib/assets/img/flyer01.png
+    - lib/assets/img/flyer02.png

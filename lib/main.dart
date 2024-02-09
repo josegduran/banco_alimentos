@@ -73,8 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       children: [
-        _buildImage('lib/assets/img/logoanahuac.png'),
-        _buildImage('lib/assets/img/logoanahuac.png'),
+        _buildImage('lib/assets/img/flyer01.png'),
+        _buildImage('lib/assets/img/flyer02.png'),
         _buildImage('lib/assets/img/logoanahuac.png'),
         _buildImage('lib/assets/img/logoanahuac.png'),
         _buildImage('lib/assets/img/logoanahuac.png'),
@@ -85,19 +85,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildImage(String imagePath) {
     return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
+      child: ClipRect(
+        child: Align(
+          alignment: Alignment.center,
+          heightFactor: 1.0,
+          child: Image.asset(
             imagePath,
-            height: 100.0,
-            width: 100.0,
             fit: BoxFit.cover,
+            width: double.infinity, // O ajusta el ancho según sea necesario
           ),
-        ],
+        ),
       ),
     );
   }
+
 
 }
 
@@ -121,7 +122,7 @@ class LoginPage extends StatelessWidget {
                 // Image from assets
                 Image.asset(
                   'lib/assets/img/bamx_logo.png',
-                  height: 100.0, // Ajusta la altura según sea necesario
+                  height: 200.0, // Ajusta la altura según sea necesario
                 ),
                 const SizedBox(height: 20.0),
                 Text(
