@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import '/pages/tareasPendientes.dart';
-import '/pages/tareasEnProceso.dart';
+import 'tareasPendientes.dart';
+import 'tareasEnProceso.dart';
+import 'testdb.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -76,7 +77,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TareasPendientesPage()),
+                                MaterialPageRoute(builder: (context) => TestDBPage()),
                               );
                             },
                           ),
