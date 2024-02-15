@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574319430640",
+    "project_id": "bamx-db",
+    "storage_bucket": "bamx-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574319430640:android:8006e92f068ad0cb872b35",
+        "android_client_info": {
+          "package_name": "com.example.banco_alimentos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWAUyIMUIR057JgBohCYIjiEvJbYzD_6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
