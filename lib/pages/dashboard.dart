@@ -1,79 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
+import '/pages/tareasPendientes.dart';
+import '/pages/tareasEnProceso.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  Timer? _inactivityTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    startInactivityTimer();
+  }
+
+  void startInactivityTimer() {
+    _inactivityTimer = Timer(Duration(seconds: 120), () {
+      // Regresar a la página principal después de 120 segundos de inactividad
+      Navigator.pushReplacementNamed(context, '/');
+    });
+  }
+
+  void resetInactivityTimer() {
+    _inactivityTimer?.cancel();
+    startInactivityTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: GoogleFonts.montserrat(), // Establece Montserrat como la fuente predeterminada
+      style: GoogleFonts.montserrat(),
       child: WillPopScope(
         onWillPop: () async {
           // Evitar que el usuario pueda regresar a la página anterior
-          return false;
+          return true;
         },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Buen día, José! ☀️', style: GoogleFonts.montserrat(),),
-          ),
-          drawer: _buildDrawer(context),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.only(top: 16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Próximos a vencer', style: GoogleFonts.montserrat()
-                    ),
-                    const SizedBox(height: 20.0),
-                    _buildCarousel(),
-                    const SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildDashboardButton(CupertinoIcons.clock, iconColor: Colors.black),
-                        const SizedBox(width: 10.0),
-                        _buildDashboardButton(CupertinoIcons.rocket, iconColor: Colors.black),
-                        const SizedBox(width: 10.0),
-                        _buildDashboardButton(CupertinoIcons.check_mark_circled, iconColor: Colors.black),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildDashboardButton(CupertinoIcons.arrow_down, iconColor: Colors.black),
-                        const SizedBox(width: 10.0),
-                        _buildDashboardButton(CupertinoIcons.arrow_up, iconColor: Colors.black),
-                        const SizedBox(width: 10.0),
-                        _buildDashboardButton(CupertinoIcons.snow, iconColor: Colors.black),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
+        child: GestureDetector(
+          onTap: () {
+            resetInactivityTimer();
+          },
+          onPanUpdate: (_) {
+            resetInactivityTimer();
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Buen día ☀️', style: GoogleFonts.montserrat()),
+            ),
+            drawer: _buildDrawer(context),
+            body: SingleChildScrollView(
+              padding: EdgeInsets.only(top: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                          'Próximos a vencer', style: GoogleFonts.montserrat()
+                      ),
+                      const SizedBox(height: 20.0),
+                      _buildCarousel(),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildDashboardButton(
+                            CupertinoIcons.clock,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TareasPendientesPage()),
+                              );
+                            },
+                          ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildSemaphoreButton(0),
-                        const SizedBox(width: 10.0),
-                        _buildSemaphoreButton(1),
-                        const SizedBox(width: 10.0),
-                        _buildSemaphoreButton(2),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildDashboardButton(CupertinoIcons.exclamationmark, iconColor: Colors.black),
-                        const SizedBox(width: 10.0),
-                        _buildDashboardButton(CupertinoIcons.hammer, iconColor: Colors.black),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 10.0),
+
+                          _buildDashboardButton(
+                            CupertinoIcons.rocket,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TareasEnProcesoPage()),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 10.0),
+                          _buildDashboardButton(CupertinoIcons.check_mark_circled, iconColor: Colors.black),
+                        ],
+                      ),
+                      const SizedBox(height: 5.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildDashboardButton(CupertinoIcons.arrow_down, iconColor: Colors.black),
+                          const SizedBox(width: 10.0),
+                          _buildDashboardButton(CupertinoIcons.arrow_up, iconColor: Colors.black),
+                          const SizedBox(width: 10.0),
+                          _buildDashboardButton(CupertinoIcons.hand_raised, iconColor: Colors.black),
+                        ],
+                      ),
+                      const SizedBox(height: 5.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildDashboardButton(CupertinoIcons.question_circle, iconColor: Colors.black),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -109,7 +153,7 @@ class DashboardPage extends StatelessWidget {
           child: Center(
             child: Text(
               title,
-              style: GoogleFonts.montserrat(color: Colors.white), // Aplica el estilo a la tarjeta
+              style: GoogleFonts.montserrat(color: Colors.white),
             ),
           ),
         ),
@@ -117,36 +161,10 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSemaphoreButton(int index) {
-    Color iconColor;
-
-    // Asignar el color según el índice
-    switch (index) {
-      case 0:
-        iconColor = Colors.lightGreen;
-        break;
-      case 1:
-        iconColor = Colors.orange;
-        break;
-      case 2:
-        iconColor = Colors.redAccent;
-        break;
-      default:
-        iconColor = Colors.black;
-    }
-
-    return _buildDashboardButton(
-      CupertinoIcons.stopwatch_fill,
-      iconColor: iconColor,
-    );
-  }
-
-  Widget _buildDashboardButton(IconData icon, {Color? iconColor}) {
+  Widget _buildDashboardButton(IconData icon, {Color? iconColor, VoidCallback? onPressed}) {
     return Expanded(
       child: ElevatedButton.icon(
-        onPressed: () {
-          // Agregar lógica para el ítem correspondiente del panel de control
-        },
+        onPressed: onPressed,
         icon: Icon(
           icon,
           color: iconColor,
@@ -157,22 +175,20 @@ class DashboardPage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          elevation: 10, // Ajusta el valor de elevación según sea necesario
+          elevation: 10,
         ),
       ),
     );
   }
 
-
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
-      // Ajusta la propiedad width para reducir el área horizontal
-      width: 200, // Puedes ajustar este valor según tus necesidades
+      width: 200,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: 100, // Ajusta la altura según tus necesidades
+            height: 100,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.black,
@@ -191,19 +207,19 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('Perfil', style: GoogleFonts.montserrat()),
+            title: Text('Contacto', style: GoogleFonts.montserrat()),
             onTap: () {
               // Agregar lógica para la opción 1 del menú
             },
           ),
           ListTile(
-            title: Text('Contacto', style: GoogleFonts.montserrat()),
+            title: Text('Reportar problema', style: GoogleFonts.montserrat()),
             onTap: () {
               // Agregar lógica para la opción 2 del menú
             },
           ),
           ListTile(
-            title: Text('Cerrar sesión', style: GoogleFonts.montserrat()),
+            title: Text('Lobby', style: GoogleFonts.montserrat()),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/');
             },
@@ -212,8 +228,10 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _inactivityTimer?.cancel();
+    super.dispose();
+  }
 }
-
-
-
-

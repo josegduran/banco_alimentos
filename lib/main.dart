@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'pages/dashboard.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,34 +33,188 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isRedSquareVisible = true;
+  bool isAmberSquareVisible = true;
+  bool isGreenSquareVisible = true;
+
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    startBlinking();
+  }
+
+  void startBlinking() {
+    _timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+      setState(() {
+        isRedSquareVisible = !isRedSquareVisible;
+        isAmberSquareVisible = !isAmberSquareVisible;
+        isGreenSquareVisible = !isGreenSquareVisible;
+      });
+    });
+  }
+
+  void resetTimer() {
+    _timer?.cancel();
+    startBlinking();
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          // Evitar que el usuario pueda regresar a la página anterior
-          return false;
+      body: GestureDetector(
+        onTap: () {
+          resetTimer();
         },
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 60.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildImageGrid(),
-                Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the login page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text('Iniciar Sesión',
-                      style: GoogleFonts.montserrat(color: Colors.black)),
-                ),
-              ],
+        onPanUpdate: (_) {
+          resetTimer();
+        },
+        child: WillPopScope(
+          onWillPop: () async {
+            // Evitar que el usuario pueda regresar a la página anterior
+            return false;
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Añadir un espacio en blanco con margen
+                  SizedBox(height: 50.0),
+                  // Contenedor para ajustar la posición del semáforo
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Aquí puedes personalizar tu semáforo horizontal
+                      Container(
+                        width: screenWidth / 3 - 20, // Ajustar según sea necesario
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: isRedSquareVisible ? Colors.redAccent : Colors.transparent,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(30.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 10),
+                            )
+                          ]
+                        ),
+                        margin: EdgeInsets.all(1),
+                      ),
+                      Container(
+                        width: screenWidth / 3 - 20,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: isAmberSquareVisible ? Colors.amber : Colors.transparent,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(30.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 10),
+                            )
+                          ]
+                        ),
+                        margin: EdgeInsets.all(1),
+                      ),
+                      Container(
+                        width: screenWidth / 3 - 20,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: isGreenSquareVisible ? Colors.lightGreen : Colors.transparent,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(30.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 10),
+                            )
+                          ]
+                        ),
+                        margin: EdgeInsets.all(1),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 50.0),
+                  // Agregar la tabla con los encabezados (folio, nombre, proveedor)
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(30.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 10),
+                        )
+                      ]
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: [
+                          DataColumn(label: Text('Folio')),
+                          DataColumn(label: Text('Nombre')),
+                          DataColumn(label: Text('Proveedor')),
+                          DataColumn(label: Text('Cantidad')),
+                        ],
+                        rows: [
+                          DataRow(cells: [
+                            DataCell(Text('1')),
+                            DataCell(Text('Nombre1')),
+                            DataCell(Text('Proveedor1')),
+                            DataCell(Text('Cantidad1')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('2')),
+                            DataCell(Text('Nombre2')),
+                            DataCell(Text('Proveedor2')),
+                            DataCell(Text('Cantidad2')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('3')),
+                            DataCell(Text('Nombre3')),
+                            DataCell(Text('Proveedor3')),
+                            DataCell(Text('Cantidad3')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('4')),
+                            DataCell(Text('Nombre4')),
+                            DataCell(Text('Proveedor4')),
+                            DataCell(Text('Cantidad4')),
+                          ]),
+                          // Agregar más filas según sea necesario
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate to the login page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardPage()),
+                      );
+                    },
+                    child: Text('Operaciones',
+                        style: GoogleFonts.montserrat(color: Colors.black)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -67,112 +222,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildImageGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: [
-        _buildImage('lib/assets/img/flyer01.png'),
-        _buildImage('lib/assets/img/flyer02.png'),
-        _buildImage('lib/assets/img/logoanahuac.png'),
-        _buildImage('lib/assets/img/logoanahuac.png'),
-        _buildImage('lib/assets/img/logoanahuac.png'),
-        _buildImage('lib/assets/img/logoanahuac.png'),
-      ],
-    );
-  }
-
-  Widget _buildImage(String imagePath) {
-    return Card(
-      child: ClipRect(
-        child: Align(
-          alignment: Alignment.center,
-          heightFactor: 1.0,
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity, // O ajusta el ancho según sea necesario
-          ),
-        ),
-      ),
-    );
-  }
-
-
-}
-
-
-
-class LoginPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Iniciar Sesión', style: GoogleFonts.montserrat()),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Image from assets
-                Image.asset(
-                  'lib/assets/img/bamx_logo.png',
-                  height: 200.0, // Ajusta la altura según sea necesario
-                ),
-                const SizedBox(height: 20.0),
-                Text(
-                  'Ingresa tus datos', style: GoogleFonts.montserrat()
-                ),
-                const SizedBox(height: 20.0),
-                // Username TextField
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Usuario',
-                    border: OutlineInputBorder(),
-                    labelStyle: GoogleFonts.montserrat(),
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(),
-                    labelStyle: GoogleFonts.montserrat(),
-                  ),
-                ),
-
-                const SizedBox(height: 20.0),
-                // Login Button
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardPage()),
-                    );
-                  },
-                  child: Text('Acceder',
-                      style: GoogleFonts.montserrat(color: Colors.black)),
-                ),
-                const SizedBox(height: 10.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Agregar lógica para solicitar acceso
-                  },
-                  child: Text('Solicitar acceso',
-                      style: GoogleFonts.montserrat(color: Colors.black)),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }
-
