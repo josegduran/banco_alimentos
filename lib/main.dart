@@ -211,6 +211,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   Spacer(),
                   ElevatedButton(
                     onPressed: () async {
+                      // Navigate to the dashboard page
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardPage()),
+                      );
+                      /*
                       final currentRowCount = await UserSheetsApi.getRowCount();
                       final newId = currentRowCount + 1;
 
@@ -221,6 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       };
 
                       await UserSheetsApi.insert([user]);
+                      */
                     },
                     child: Text('Operaciones',
                         style: GoogleFonts.montserrat(color: Colors.black)),
