@@ -14,9 +14,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   animated_text_kit: ^4.2.1
-  #Dependencias de Firestore
-  firebase_core: ^2.3.0
-  cloud_firestore: ^4.14.0
+  gsheets: ^0.5.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,14 @@
+import 'package:banco_alimentos/models/usuariosModel.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'pages/dashboard.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'services/api_connection.dart';
+
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserSheetsApi.init();
   runApp(const MyApp());
 }
 
@@ -91,57 +96,61 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       // Aquí puedes personalizar tu semáforo horizontal
                       Container(
-                        width: screenWidth / 3 - 20, // Ajustar según sea necesario
+                        width: screenWidth / 3 - 20,
+                        // Ajustar según sea necesario
                         height: 100,
                         decoration: BoxDecoration(
-                          color: isRedSquareVisible ? Colors.redAccent : Colors.transparent,
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(30.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 10),
-                            )
-                          ]
-                        ),
+                            color: isRedSquareVisible
+                                ? Colors.redAccent
+                                : Colors.transparent,
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(30.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 10),
+                              )
+                            ]),
                         margin: EdgeInsets.all(1),
                       ),
                       Container(
                         width: screenWidth / 3 - 20,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: isAmberSquareVisible ? Colors.amber : Colors.transparent,
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(30.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 10),
-                            )
-                          ]
-                        ),
+                            color: isAmberSquareVisible
+                                ? Colors.amber
+                                : Colors.transparent,
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(30.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 10),
+                              )
+                            ]),
                         margin: EdgeInsets.all(1),
                       ),
                       Container(
                         width: screenWidth / 3 - 20,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: isGreenSquareVisible ? Colors.lightGreen : Colors.transparent,
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(30.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 10),
-                            )
-                          ]
-                        ),
+                            color: isGreenSquareVisible
+                                ? Colors.lightGreen
+                                : Colors.transparent,
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(30.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 10),
+                              )
+                            ]),
                         margin: EdgeInsets.all(1),
                       ),
                     ],
@@ -150,17 +159,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   // Agregar la tabla con los encabezados (folio, nombre, proveedor)
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 10),
-                        )
-                      ]
-                    ),
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(30.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 10),
+                          )
+                        ]),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
@@ -203,12 +211,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   Spacer(),
                   ElevatedButton(
-                    onPressed: () {
-                      // Navigate to the login page
+                    onPressed: () async {
+                      // Navigate to the dashboard page
+                      /*
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DashboardPage()),
+                        MaterialPageRoute(
+                            builder: (context) => DashboardPage()),
                       );
+                      */
+
+                      final user = {
+                        UserFields.id: 1,
+                        UserFields.nombre: 'José',
+                        UserFields.apellido: 'Durán',
+                      };
+                      await UserSheetsApi.insert([user]);
                     },
                     child: Text('Operaciones',
                         style: GoogleFonts.montserrat(color: Colors.black)),
