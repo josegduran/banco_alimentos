@@ -45,7 +45,15 @@ class UserSheetsApi {
     }
   }
 
-  static Future insert(List<Map<String, dynamic>> rowList) async{
+  static Future<int> getRowCount() async {
+    if (_userSheet == null) return 0;
+
+    final lastRow = await _userSheet!.values.lastRow();
+    final firstCellValue = lastRow?.first;
+    return int.tryParse(firstCellValue ?? '0') ?? 0;
+  }
+
+  static Future insert(List<Map<String, dynamic>> rowList) async {
     if (_userSheet == null) return;
 
     _userSheet!.values.map.appendRows(rowList);

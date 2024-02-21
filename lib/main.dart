@@ -5,7 +5,6 @@ import 'dart:async';
 import 'pages/dashboard.dart';
 import 'services/api_connection.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserSheetsApi.init();
@@ -212,20 +211,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   Spacer(),
                   ElevatedButton(
                     onPressed: () async {
-                      // Navigate to the dashboard page
-                      /*
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DashboardPage()),
-                      );
-                      */
+                      final currentRowCount = await UserSheetsApi.getRowCount();
+                      final newId = currentRowCount + 1;
 
                       final user = {
-                        UserFields.id: 1,
+                        UserFields.id: newId,
                         UserFields.nombre: 'José',
                         UserFields.apellido: 'Durán',
                       };
+
                       await UserSheetsApi.insert([user]);
                     },
                     child: Text('Operaciones',
