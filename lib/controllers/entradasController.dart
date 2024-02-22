@@ -1,4 +1,4 @@
-import 'package:banco_alimentos/models/usuariosModel.dart';
+import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {

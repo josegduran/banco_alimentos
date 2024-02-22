@@ -1,9 +1,9 @@
-import 'package:banco_alimentos/models/usuariosModel.dart';
+import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'pages/dashboard.dart';
-import 'services/api_connection.dart';
+import 'controllers/entradasController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
