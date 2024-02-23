@@ -18,14 +18,14 @@ class UserSheetsApi {
   }
   ''';
 
-  static final _spreadsheetId = '18zJa9ypwiHcn386jmtSqNIaLiTVc0VADjN_nHFWh_4I';
+  static final _spreadsheetId = '1SuxsEvDehT-BVc3t_j9iKvmbPgnkoulf8fcqtFqmQLo';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
 
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'credenciales');
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'inventario');
 
       final firstRow = UserFields.getFields();
       _userSheet!.values.insertRow(1, firstRow);

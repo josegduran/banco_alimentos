@@ -1,4 +1,3 @@
-import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
@@ -50,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void startBlinking() {
-    _timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         isRedSquareVisible = !isRedSquareVisible;
         isAmberSquareVisible = !isAmberSquareVisible;
@@ -218,18 +217,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         MaterialPageRoute(
                             builder: (context) => DashboardPage()),
                       );
-                      /*
-                      final currentRowCount = await UserSheetsApi.getRowCount();
-                      final newId = currentRowCount + 1;
-
-                      final user = {
-                        UserFields.id: newId,
-                        UserFields.nombre: 'José',
-                        UserFields.apellido: 'Durán',
-                      };
-
-                      await UserSheetsApi.insert([user]);
-                      */
                     },
                     child: Text('Operaciones',
                         style: GoogleFonts.montserrat(color: Colors.black)),

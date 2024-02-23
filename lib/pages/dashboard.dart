@@ -21,7 +21,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void startInactivityTimer() {
-    _inactivityTimer = Timer(Duration(seconds: 120), () {
+    _inactivityTimer = Timer(Duration(seconds: 5000), () {
       // Regresar a la página principal después de 120 segundos de inactividad
       Navigator.pushReplacementNamed(context, '/');
     });
