@@ -1,3 +1,4 @@
+import 'package:banco_alimentos/pages/entradas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,9 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               );
                             },
                           ),
-
                           const SizedBox(width: 10.0),
-
                           _buildDashboardButton(
                             CupertinoIcons.rocket,
                             iconColor: Colors.black,
@@ -102,7 +101,17 @@ class _DashboardPageState extends State<DashboardPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildDashboardButton(CupertinoIcons.arrow_down, iconColor: Colors.black),
+                          _buildDashboardButton(
+                            CupertinoIcons.arrow_down,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EntradasPage()),
+                              );
+                            },
+                          ),
                           const SizedBox(width: 10.0),
                           _buildDashboardButton(CupertinoIcons.arrow_up, iconColor: Colors.black),
                           const SizedBox(width: 10.0),
