@@ -25,7 +25,7 @@ class UserSheetsApi {
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'inventario');
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'entradas');
 
       final firstRow = UserFields.getFields();
       _userSheet!.values.insertRow(1, firstRow);
