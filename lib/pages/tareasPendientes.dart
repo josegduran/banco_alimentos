@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+import 'package:banco_alimentos/controllers/tareasPendientesController.dart';
+import 'package:banco_alimentos/models/tareasPendientesModel.dart';
 
 class TareasPendientesPage extends StatefulWidget {
   @override
@@ -9,16 +11,17 @@ class TareasPendientesPage extends StatefulWidget {
 
 class _TareasPendientesPageState extends State<TareasPendientesPage> {
   Timer? _inactivityTimer;
+  List<Map<String, dynamic>> allRows = [];
 
   @override
   void initState() {
     super.initState();
     startInactivityTimer();
+    fetchData(); // Fetch data when the widget initializes
   }
 
   void startInactivityTimer() {
-    _inactivityTimer = Timer(Duration(seconds: 120), () {
-      // Regresar a la página principal después de 120 segundos de inactividad
+    _inactivityTimer = Timer(Duration(seconds: 5000), () {
       Navigator.pushReplacementNamed(context, '/');
     });
   }
@@ -26,6 +29,14 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   void resetInactivityTimer() {
     _inactivityTimer?.cancel();
     startInactivityTimer();
+  }
+
+  Future<void> fetchData() async {
+    await UserSheetsApi.init();
+    final data = await UserSheetsApi.readAllRows();
+    setState(() {
+      allRows = data;
+    });
   }
 
   @override
@@ -36,14 +47,23 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
       ),
       body: GestureDetector(
         onTap: () {
-          // Resetea el temporizador de inactividad cuando se realiza una acción
           resetInactivityTimer();
         },
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildTareasTable(),
+              if (allRows.isEmpty)
+                Text('No hay tareas pendientes.')
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: allRows.length,
+                  itemBuilder: (context, index) {
+                    final rowData = allRows[index];
+                    return _buildRowWidget(rowData);
+                  },
+                ),
             ],
           ),
         ),
@@ -51,36 +71,14 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
     );
   }
 
-  Widget _buildTareasTable() {
-    return DataTable(
-      columns: [
-        DataColumn(label: Text('Tarea')),
-        DataColumn(label: Text('Descripción')),
-        DataColumn(label: Text('Acciones')),
-      ],
-      rows: [
-        _buildTareaRow('Tarea 1', 'Descripción de la Tarea 1'),
-        _buildTareaRow('Tarea 2', 'Descripción de la Tarea 2'),
-        _buildTareaRow('Tarea 3', 'Descripción de la Tarea 3'),
-        // Agrega más filas según sea necesario
-      ],
+  Widget _buildRowWidget(Map<String, dynamic> rowData) {
+    // Customize this method to build a widget for each row of data
+    return ListTile(
+      title: Text(rowData['descripcion']),
+      subtitle: Text(rowData['fechaCreacion']),
+      // Add more fields as needed
     );
   }
-
-  DataRow _buildTareaRow(String tarea, String descripcion) {
-    return DataRow(cells: [
-      DataCell(Text(tarea)),
-      DataCell(Text(descripcion)),
-      DataCell(
-        ElevatedButton(
-          onPressed: () {
-            // Lógica para manejar la acción de "Aceptar" para la tarea
-            // ...
-            print('Aceptar tarea: $tarea');
-          },
-          child: Text('Aceptar'),
-        ),
-      ),
-    ]);
-  }
 }
+
+
