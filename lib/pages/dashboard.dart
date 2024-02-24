@@ -115,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           const SizedBox(width: 10.0),
                           _buildDashboardButton(CupertinoIcons.arrow_up, iconColor: Colors.black),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.hand_raised, iconColor: Colors.black),
+                          _buildDashboardButton(CupertinoIcons.exclamationmark, iconColor: Colors.black),
                         ],
                       ),
                       const SizedBox(height: 5.0),
@@ -123,6 +123,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           _buildDashboardButton(CupertinoIcons.question_circle, iconColor: Colors.black),
+                          const SizedBox(width: 10.0),
+                          _buildDashboardButton(CupertinoIcons.hand_raised, iconColor: Colors.black),
                         ],
                       ),
                     ],
