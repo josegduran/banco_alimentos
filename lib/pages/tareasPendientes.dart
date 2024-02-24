@@ -11,13 +11,11 @@ class TareasPendientesPage extends StatefulWidget {
 
 class _TareasPendientesPageState extends State<TareasPendientesPage> {
   Timer? _inactivityTimer;
-  List<Map<String, dynamic>> allRows = [];
 
   @override
   void initState() {
     super.initState();
     startInactivityTimer();
-    fetchData(); // Fetch data when the widget initializes
   }
 
   void startInactivityTimer() {
@@ -29,14 +27,6 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   void resetInactivityTimer() {
     _inactivityTimer?.cancel();
     startInactivityTimer();
-  }
-
-  Future<void> fetchData() async {
-    await UserSheetsApi.init();
-    final data = await UserSheetsApi.readAllRows();
-    setState(() {
-      allRows = data;
-    });
   }
 
   @override
@@ -51,34 +41,64 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
         },
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              if (allRows.isEmpty)
-                Text('No hay tareas pendientes.')
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: allRows.length,
-                  itemBuilder: (context, index) {
-                    final rowData = allRows[index];
-                    return _buildRowWidget(rowData);
-                  },
-                ),
-            ],
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: fetchData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Muestra un indicador de carga centrado
+                return Center(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else if (snapshot.hasError || snapshot.data == null) {
+                // Muestra un mensaje de error si ocurre un error o si los datos son nulos
+                return Text('Error al obtener los datos');
+              } else {
+                // Muestra los datos cuando la operación asíncrona ha terminado
+                return buildDataTable(snapshot.data!);
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildRowWidget(Map<String, dynamic> rowData) {
-    // Customize this method to build a widget for each row of data
-    return ListTile(
-      title: Text(rowData['descripcion']),
-      subtitle: Text(rowData['fechaCreacion']),
-      // Add more fields as needed
-    );
+
+  Future<List<Map<String, dynamic>>> fetchData() async {
+    await UserSheetsApi.init();
+    final data = await UserSheetsApi.readAllRows();
+    return data ?? []; // Si data es nulo, devuelve una lista vacía
+  }
+
+  Widget buildDataTable(List<Map<String, dynamic>> data) {
+    if (data.isEmpty) {
+      return Text('No hay tareas pendientes.');
+    } else {
+      return DataTable(
+        columns: [
+          DataColumn(label: Text('Nombre')),
+          DataColumn(label: Text('Prioridad')),
+          DataColumn(label: Text('Acción')),
+        ],
+        rows: data.map<DataRow>((rowData) {
+          return DataRow(
+            cells: [
+              DataCell(Text(rowData['nombre'] ?? '')),
+              DataCell(Text(rowData['prioridad'] ?? '')),
+              DataCell(ElevatedButton(
+                onPressed: () {
+                  print('Aceptar clicado para ${rowData['estado']}');
+                },
+                child: Text('Aceptar'),
+              )),
+            ],
+          );
+        }).toList(),
+      );
+    }
   }
 }
-
 

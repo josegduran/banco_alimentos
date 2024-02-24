@@ -11,5 +11,5 @@ class UserFields {
   static final String ubicacionAlmacen = 'ubicacionAlmacen';
   static final String quienRegistro = 'quienRegistro';
 
-  static List<String> getFields() => [id, numeroLote];
+  static List<String> getFields() => [id];
 }

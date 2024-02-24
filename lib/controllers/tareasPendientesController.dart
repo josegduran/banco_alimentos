@@ -1,4 +1,4 @@
-import 'package:banco_alimentos/models/entradasModel.dart';
+import 'package:banco_alimentos/models/tareasPendientesModel.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
@@ -19,14 +19,13 @@ class UserSheetsApi {
   ''';
 
   static final _spreadsheetId = '1SuxsEvDehT-BVc3t_j9iKvmbPgnkoulf8fcqtFqmQLo';
-  static final _tableName = 'produccion';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
 
-  static Future<void> init() async {
+  static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: _tableName);
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'produccion');
 
       final firstRow = UserFields.getFields();
       _userSheet!.values.insertRow(1, firstRow);
@@ -35,36 +34,47 @@ class UserSheetsApi {
     }
   }
 
-  static Future<Worksheet?> _getWorkSheet(
-      Spreadsheet spreadsheet, {
-        required String title,
-      }) async {
+  static Future<Worksheet> _getWorkSheet(
+    Spreadsheet spreadsheet, {
+    required String title,
+  }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
-      return spreadsheet.worksheetByTitle(title);
+      return spreadsheet.worksheetByTitle(title)!;
     }
+  }
+
+  static Future<int> getRowCount() async {
+    if (_userSheet == null) return 0;
+
+    final lastRow = await _userSheet!.values.lastRow();
+    final firstCellValue = lastRow?.first;
+    return int.tryParse(firstCellValue ?? '0') ?? 0;
+  }
+
+  static Future insert(List<Map<String, dynamic>> rowList) async {
+    if (_userSheet == null) return;
+
+    _userSheet!.values.map.appendRows(rowList);
   }
 
   static Future<List<Map<String, dynamic>>> readAllRows() async {
     if (_userSheet == null) return [];
 
-    final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-    final valuesMapper = await spreadsheet.worksheetByTitle(_tableName)?.values;
+    final values = await _userSheet!.values.allRows();
+    final headers = UserFields.getFields();
 
-    if (valuesMapper == null) return [];
-
-    final rows = await valuesMapper.allRows();
-    if (rows == null || rows.isEmpty) return [];
-
-    final headers = rows.first;
-    final dataRows = rows.skip(1);
-
-    return dataRows.map((row) {
-      return Map.fromIterables(headers, row);
+    // Convertir las filas de valores en una lista de mapas
+    final rows = values.skip(1).map((row) {
+      Map<String, dynamic> rowData = {};
+      for (int i = 0; i < headers.length; i++) {
+        rowData[headers[i]] = row[i];
+      }
+      return rowData;
     }).toList();
+
+    return rows;
   }
-
-
 
 }
