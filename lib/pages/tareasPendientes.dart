@@ -66,7 +66,6 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
     );
   }
 
-
   Future<List<Map<String, dynamic>>> fetchData() async {
     await UserSheetsApi.init();
     final data = await UserSheetsApi.readAllRows();
@@ -86,8 +85,32 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
         rows: data.map<DataRow>((rowData) {
           return DataRow(
             cells: [
-              DataCell(Text(rowData['nombre'] ?? '')),
-              DataCell(Text(rowData['prioridad'] ?? '')),
+              DataCell(
+                GestureDetector(
+                  onTap: () {
+                    // Navega a la pantalla de detalles con la información completa de la tarea
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TareaDetallesPage(data: rowData),
+                      ),
+                    );
+                  },
+                  child: Text(rowData['nombre'] ?? ''),
+                ),
+              ),
+              DataCell(GestureDetector(
+                onTap: () {
+                  // Navega a la pantalla de detalles con la información completa de la tarea
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TareaDetallesPage(data: rowData),
+                    ),
+                  );
+                },
+                child: Text(rowData['prioridad'] ?? ''),
+              ),),
               DataCell(ElevatedButton(
                 onPressed: () {
                   print('Aceptar clicado para ${rowData['estado']}');
@@ -102,3 +125,36 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   }
 }
 
+class TareaDetallesPage extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  TareaDetallesPage({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // Implementa la pantalla de detalles con la información completa de la tarea
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles de la Tarea'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nombre: ${data['nombre']}'),
+            Text('Descripción: ${data['descripcion']}'),
+            Text('Fecha de creacion: ${data['fechaCreacion']}'),
+            Text('Fecha de vencimiento: ${data['fechaVencimiento']}'),
+            Text('Prioridad: ${data['prioridad']}'),
+            Text('Estado: ${data['estado']}'),
+            Text('Aceptado por: ${data['aceptadoPor']}'),
+            Text('Comentarios: ${data['comentarios']}'),
+            Text('Creado por: ${data['creadoPor']}'),
+            // Agrega más detalles según sea necesario
+          ],
+        ),
+      ),
+    );
+  }
+}
