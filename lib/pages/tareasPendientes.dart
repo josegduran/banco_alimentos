@@ -99,23 +99,24 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                   child: Text(rowData['nombre'] ?? ''),
                 ),
               ),
-              DataCell(GestureDetector(
-                onTap: () {
-                  // Navega a la pantalla de detalles con la información completa de la tarea
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TareaDetallesPage(data: rowData),
-                    ),
-                  );
-                },
-                child: Text(rowData['prioridad'] ?? ''),
-              ),),
+              DataCell(
+                GestureDetector(
+                  onTap: () {
+                    // Navega a la pantalla de detalles con la información completa de la tarea
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TareaDetallesPage(data: rowData),
+                      ),
+                    );
+                  },
+                  child: Text(rowData['prioridad'] ?? ''),
+                ),
+              ),
               DataCell(ElevatedButton(
                 onPressed: () {
                   // Extraer el ID de la tarea
                   int? taskId = int.tryParse(rowData['id'] ?? '');
-
 
                   // Mostrar un cuadro de diálogo para confirmar la acción
                   showDialog(
@@ -123,7 +124,8 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text('Confirmación'),
-                        content: Text('¿Estás seguro de que quieres aceptar esta tarea?'),
+                        content: Text(
+                            '¿Estás seguro de que quieres aceptar esta tarea?'),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -134,20 +136,23 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              // Cerrar el cuadro de diálogo
-                              Navigator.of(context).pop();
+
 
                               // Continuar con la acción de aceptar la tarea
                               print('Aceptar clicado para la tarea con ID: $taskId');
                               if (taskId != null) {
-                                // Mostrar un cuadro de diálogo para confirmar la acción (como se hizo anteriormente)
-
                                 // Después de confirmar, actualizar el estado
                                 await UserSheetsApi.updateCell(
                                   id: taskId,
-                                key: 'estado',
-                                value: 'en proceso');
+                                  key: 'estado',
+                                  value: 'en proceso',
+                                );
                               }
+                              // Actualizar la página
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => TareasPendientesPage()),
+                              );
                             },
                             child: Text('Aceptar'),
                           ),
@@ -158,8 +163,6 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                 },
                 child: Text('Aceptar'),
               )),
-
-
             ],
           );
         }).toList(),
