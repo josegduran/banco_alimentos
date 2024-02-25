@@ -66,8 +66,14 @@ class UserSheetsApi {
     final values = await _userSheet!.values.allRows();
     final headers = UserFields.getFields();
 
-    // Convertir las filas de valores en una lista de mapas
-    final rows = values.skip(1).map((row) {
+    // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
+    final filteredRows = values.where((row) {
+      final rowData = Map<String, dynamic>.fromIterables(headers, row);
+      return rowData['estado'] == 'pendiente';
+    }).toList();
+
+    // Convertir las filas de valores filtradas en una lista de mapas
+    final rows = filteredRows.map((row) {
       Map<String, dynamic> rowData = {};
       for (int i = 0; i < headers.length; i++) {
         rowData[headers[i]] = row[i];
@@ -77,6 +83,7 @@ class UserSheetsApi {
 
     return rows;
   }
+
 
   static Future<bool> updateCell({
     required int id,
