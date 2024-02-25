@@ -88,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   // Añadir un espacio en blanco con margen
                   SizedBox(height: 50.0),
+
                   // Contenedor para ajustar la posición del semáforo
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -153,6 +154,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
+
+                  // Texto 'Tareas pendientes de hoy' below the traffic light
+                  SizedBox(height: 50.0),
+                  Text(
+                    'Tareas pendientes de hoy',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   SizedBox(height: 50.0),
                   // Agregar la tabla con los encabezados (folio, nombre, proveedor)
                   Container(
@@ -171,33 +182,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                         columns: [
-                          DataColumn(label: Text('Folio')),
                           DataColumn(label: Text('Nombre')),
-                          DataColumn(label: Text('Proveedor')),
-                          DataColumn(label: Text('Cantidad')),
+                          DataColumn(label: Text('Prioridad')),
                         ],
                         rows: [
                           DataRow(cells: [
-                            DataCell(Text('1')),
-                            DataCell(Text('Nombre1')),
                             DataCell(Text('Proveedor1')),
                             DataCell(Text('Cantidad1')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('2')),
-                            DataCell(Text('Nombre2')),
                             DataCell(Text('Proveedor2')),
                             DataCell(Text('Cantidad2')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('3')),
-                            DataCell(Text('Nombre3')),
                             DataCell(Text('Proveedor3')),
                             DataCell(Text('Cantidad3')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('4')),
-                            DataCell(Text('Nombre4')),
                             DataCell(Text('Proveedor4')),
                             DataCell(Text('Cantidad4')),
                           ]),
