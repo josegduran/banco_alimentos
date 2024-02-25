@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:banco_alimentos/controllers/tareasPendientesController.dart';
-import 'package:banco_alimentos/models/tareasPendientesModel.dart';
 
 class TareasPendientesPage extends StatefulWidget {
   @override
@@ -137,8 +136,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                           ElevatedButton(
                             onPressed: () async {
                               // Continuar con la acción de aceptar la tarea
-                              print(
-                                  'Aceptar clicado para la tarea con ID: $taskId');
+                              print('Aceptar clicado para la tarea con ID: $taskId');
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
                                 await UserSheetsApi.updateCell(
@@ -155,14 +153,9 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                                 ),
                               );
 
-                              // Actualizar la página
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        TareasPendientesPage()),
-                              );
+                              Navigator.pushReplacementNamed(context, '/');
                             },
+
                             child: Text('Aceptar'),
                           ),
                         ],

@@ -1,5 +1,4 @@
 import 'package:banco_alimentos/models/tareasPendientesModel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
