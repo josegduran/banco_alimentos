@@ -113,10 +113,53 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
               ),),
               DataCell(ElevatedButton(
                 onPressed: () {
-                  print('Aceptar clicado para ${rowData['estado']}');
+                  // Extraer el ID de la tarea
+                  int? taskId = int.tryParse(rowData['id'] ?? '');
+
+
+                  // Mostrar un cuadro de diálogo para confirmar la acción
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Confirmación'),
+                        content: Text('¿Estás seguro de que quieres aceptar esta tarea?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Cerrar el cuadro de diálogo
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              // Cerrar el cuadro de diálogo
+                              Navigator.of(context).pop();
+
+                              // Continuar con la acción de aceptar la tarea
+                              print('Aceptar clicado para la tarea con ID: $taskId');
+                              if (taskId != null) {
+                                // Mostrar un cuadro de diálogo para confirmar la acción (como se hizo anteriormente)
+
+                                // Después de confirmar, actualizar el estado
+                                await UserSheetsApi.updateCell(
+                                  id: taskId,
+                                key: 'estado',
+                                value: 'en proceso');
+                              }
+                            },
+                            child: Text('Aceptar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Text('Aceptar'),
               )),
+
+
             ],
           );
         }).toList(),

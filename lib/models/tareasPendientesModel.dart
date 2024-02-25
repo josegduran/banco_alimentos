@@ -12,4 +12,6 @@ class UserFields {
 
   static List<String> getFields() => [id, nombre, descripcion, fechaCreacion,
     fechaVencimiento, prioridad, estado, aceptadoPor, comentarios, creadoPor];
+
+  
 }

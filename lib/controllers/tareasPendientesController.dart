@@ -1,4 +1,5 @@
 import 'package:banco_alimentos/models/tareasPendientesModel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
@@ -76,5 +77,26 @@ class UserSheetsApi {
 
     return rows;
   }
+
+  static Future<bool> updateCell({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async{
+    if (_userSheet == null) return false;
+    
+    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+    
+  }
+
+
+
+
+
+
+
+
+
+
 
 }
