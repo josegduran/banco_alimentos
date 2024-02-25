@@ -68,7 +68,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   Future<List<Map<String, dynamic>>> fetchData() async {
     await UserSheetsApi.init();
     final data = await UserSheetsApi.readAllRows();
-    return data ?? []; // Si data es nulo, devuelve una lista vacía
+    return data;
   }
 
   Widget buildDataTable(List<Map<String, dynamic>> data) {
