@@ -136,10 +136,9 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-
-
                               // Continuar con la acción de aceptar la tarea
-                              print('Aceptar clicado para la tarea con ID: $taskId');
+                              print(
+                                  'Aceptar clicado para la tarea con ID: $taskId');
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
                                 await UserSheetsApi.updateCell(
@@ -148,10 +147,20 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                                   value: 'en proceso',
                                 );
                               }
+
+                              // Mostrar un mensaje de tarea aceptada
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Tarea aceptada'),
+                                ),
+                              );
+
                               // Actualizar la página
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => TareasPendientesPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TareasPendientesPage()),
                               );
                             },
                             child: Text('Aceptar'),
