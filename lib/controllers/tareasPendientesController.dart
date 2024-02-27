@@ -84,7 +84,7 @@ class UserSheetsApi {
   }
 
 
-  static Future<bool> updateCell({
+  static Future<bool> updateEstado({
     required int id,
     required String key,
     required dynamic value,
@@ -92,10 +92,17 @@ class UserSheetsApi {
     if (_userSheet == null) return false;
     
     return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
-    
   }
 
+  static Future<bool> updateColaborador({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async{
+    if (_userSheet == null) return false;
 
+    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
 
 
 

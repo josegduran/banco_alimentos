@@ -139,10 +139,17 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                               print('Aceptar clicado para la tarea con ID: $taskId');
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
-                                await UserSheetsApi.updateCell(
+                                await UserSheetsApi.updateEstado(
                                   id: taskId,
                                   key: 'estado',
                                   value: 'en proceso',
+                                );
+
+                                // Después de confirmar, actualizar el estado
+                                await UserSheetsApi.updateColaborador(
+                                  id: taskId,
+                                  key: 'aceptadoPor',
+                                  value: 'José G. Durán',
                                 );
                               }
 
