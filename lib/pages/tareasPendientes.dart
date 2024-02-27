@@ -135,8 +135,9 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              // Continuar con la acción de aceptar la tarea
-                              print('Aceptar clicado para la tarea con ID: $taskId');
+                              // Obtener la fecha de hoy
+                              DateTime fechaActual = DateTime.now();
+
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
                                 await UserSheetsApi.updateEstado(
@@ -150,6 +151,12 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                                   id: taskId,
                                   key: 'aceptadoPor',
                                   value: 'José G. Durán',
+                                );
+
+                                await UserSheetsApi.updateFechaAceptacion(
+                                  id: taskId,
+                                  key: 'fechaAceptacion',
+                                  value: fechaActual.toLocal().toString(),
                                 );
                               }
 

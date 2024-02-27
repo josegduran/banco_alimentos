@@ -35,9 +35,9 @@ class UserSheetsApi {
   }
 
   static Future<Worksheet> _getWorkSheet(
-      Spreadsheet spreadsheet, {
-        required String title,
-      }) async {
+    Spreadsheet spreadsheet, {
+    required String title,
+  }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -83,33 +83,36 @@ class UserSheetsApi {
     return rows;
   }
 
-
   static Future<bool> updateEstado({
     required int id,
     required String key,
     required dynamic value,
-  }) async{
+  }) async {
     if (_userSheet == null) return false;
 
-    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
   }
 
   static Future<bool> updateColaborador({
     required int id,
     required String key,
     required dynamic value,
-  }) async{
+  }) async {
     if (_userSheet == null) return false;
 
-    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
   }
 
+  static Future<bool> updateFechaFinalizacion({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async {
+    if (_userSheet == null) return false;
 
-
-
-
-
-
-
-
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
 }
