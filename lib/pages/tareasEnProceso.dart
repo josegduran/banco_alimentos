@@ -214,12 +214,66 @@ class TareaDetallesPage extends StatelessWidget {
             DetalleItem(titulo: 'Aceptado por', contenido: data['aceptadoPor']),
             DetalleItem(titulo: 'Comentarios', contenido: data['comentarios']),
             DetalleItem(titulo: 'Creado por', contenido: data['creadoPor']),
+            // Botón 'Tarea Incompleta'
+            SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _showIncompleteDialog(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    onPrimary: Colors.white, // Color del texto
+                  ),
+                  child: Text('Tarea Incompleta'),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+void _showIncompleteDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Tarea Incompleta'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Por favor, proporciona el motivo:'),
+          TextFormField(
+            // Puedes personalizar este TextFormField según tus necesidades
+            decoration: InputDecoration(labelText: 'Motivo'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Aquí puedes realizar acciones con el motivo ingresado
+            Navigator.of(context).pop();
+          },
+          child: Text('Aceptar'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancelar'),
+        ),
+      ],
+    ),
+  );
+}
+
 
 class DetalleItem extends StatelessWidget {
   final String titulo;
