@@ -142,7 +142,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                                 await UserSheetsApi.updateEstado(
                                   id: taskId,
                                   key: 'estado',
-                                  value: 'en proceso',
+                                  value: 'En Proceso',
                                 );
 
                                 // Después de confirmar, actualizar el estado
@@ -156,7 +156,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                               // Mostrar un mensaje de tarea aceptada
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Tarea aceptada'),
+                                  content: Text('Tarea Aceptada'),
                                 ),
                               );
 

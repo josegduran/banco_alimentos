@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import 'package:banco_alimentos/controllers/tareasEnProcesoController.dart';
+import 'package:banco_alimentos/controllers/tareasFinalizadasController.dart';
 
-class TareasEnProcesoPage extends StatefulWidget {
+class TareasFinalizadasPage extends StatefulWidget {
   @override
-  _TareasEnProcesoPageState createState() => _TareasEnProcesoPageState();
+  _TareasFinalizadasPageState createState() => _TareasFinalizadasPageState();
 }
 
-class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
+class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
   Timer? _inactivityTimer;
 
   @override
@@ -32,7 +32,7 @@ class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tareas En Proceso', style: GoogleFonts.montserrat()),
+        title: Text('Tareas Finalizadas', style: GoogleFonts.montserrat()),
       ),
       body: GestureDetector(
         onTap: () {
@@ -73,7 +73,7 @@ class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
 
   Widget buildDataTable(List<Map<String, dynamic>> data) {
     if (data.isEmpty) {
-      return Text('No hay tareas en proceso.');
+      return Text('No hay tareas finalizadas.');
     } else {
       return DataTable(
         columns: [
@@ -124,7 +124,7 @@ class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
                       return AlertDialog(
                         title: Text('Confirmación'),
                         content: Text(
-                            '¿Estás seguro de que quieres finalizar esta tarea?'),
+                            '¿Estás seguro de que quieres revisar esta tarea?'),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -143,34 +143,34 @@ class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
                                 await UserSheetsApi.updateEstado(
                                   id: taskId,
                                   key: 'estado',
-                                  value: 'Finalizada',
+                                  value: 'Revisado',
                                 );
 
                                 // Después de confirmar, actualizar el estado
                                 await UserSheetsApi.updateColaborador(
                                   id: taskId,
-                                  key: 'aceptadoPor',
-                                  value: 'José G. Durán',
+                                  key: 'revisadoPor',
+                                  value: 'Supervisor',
                                 );
                               }
 
                               // Mostrar un mensaje de tarea aceptada
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Tarea Finalizada'),
+                                  content: Text('Tarea Revisada'),
                                 ),
                               );
 
                               Navigator.pushReplacementNamed(context, '/');
                             },
-                            child: Text('Finalizar'),
+                            child: Text('Revisar'),
                           ),
                         ],
                       );
                     },
                   );
                 },
-                child: Text('Finalizar'),
+                child: Text('Revisar'),
               )),
             ],
           );

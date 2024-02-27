@@ -1,4 +1,4 @@
-import 'package:banco_alimentos/models/tareasPendientesModel.dart';
+import 'package:banco_alimentos/models/tareasFinalizadasModel.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
@@ -35,9 +35,9 @@ class UserSheetsApi {
   }
 
   static Future<Worksheet> _getWorkSheet(
-    Spreadsheet spreadsheet, {
-    required String title,
-  }) async {
+      Spreadsheet spreadsheet, {
+        required String title,
+      }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -68,7 +68,7 @@ class UserSheetsApi {
     // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
     final filteredRows = values.where((row) {
       final rowData = Map<String, dynamic>.fromIterables(headers, row);
-      return rowData['estado'] == 'Pendiente';
+      return rowData['estado'] == 'Finalizada';
     }).toList();
 
     // Convertir las filas de valores filtradas en una lista de mapas
@@ -90,7 +90,7 @@ class UserSheetsApi {
     required dynamic value,
   }) async{
     if (_userSheet == null) return false;
-    
+
     return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
   }
 

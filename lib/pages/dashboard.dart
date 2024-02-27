@@ -1,4 +1,5 @@
 import 'package:banco_alimentos/pages/entradas.dart';
+import 'package:banco_alimentos/pages/tareasFinalizadas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -94,7 +95,17 @@ class _DashboardPageState extends State<DashboardPage> {
                             },
                           ),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.check_mark_circled, iconColor: Colors.black),
+                          _buildDashboardButton(
+                            CupertinoIcons.check_mark_circled,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TareasFinalizadasPage()),
+                              );
+                            },
+                          ),
                         ],
                       ),
                       const SizedBox(height: 5.0),
