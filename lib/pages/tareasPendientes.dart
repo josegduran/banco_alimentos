@@ -180,7 +180,6 @@ class TareaDetallesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Implementa la pantalla de detalles con la información completa de la tarea
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalles de la Tarea'),
@@ -190,19 +189,38 @@ class TareaDetallesPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Nombre: ${data['nombre']}'),
-            Text('Descripción: ${data['descripcion']}'),
-            Text('Fecha de creacion: ${data['fechaCreacion']}'),
-            Text('Fecha de vencimiento: ${data['fechaVencimiento']}'),
-            Text('Prioridad: ${data['prioridad']}'),
-            Text('Estado: ${data['estado']}'),
-            Text('Aceptado por: ${data['aceptadoPor']}'),
-            Text('Comentarios: ${data['comentarios']}'),
-            Text('Creado por: ${data['creadoPor']}'),
-            // Agrega más detalles según sea necesario
+            DetalleItem(titulo: 'Nombre', contenido: data['nombre']),
+            DetalleItem(titulo: 'Descripción', contenido: data['descripcion']),
+            DetalleItem(titulo: 'Fecha de creación', contenido: data['fechaCreacion']),
+            DetalleItem(titulo: 'Fecha de vencimiento', contenido: data['fechaVencimiento']),
+            DetalleItem(titulo: 'Prioridad', contenido: data['prioridad']),
+            DetalleItem(titulo: 'Estado', contenido: data['estado']),
+            DetalleItem(titulo: 'Aceptado por', contenido: data['aceptadoPor']),
+            DetalleItem(titulo: 'Comentarios', contenido: data['comentarios']),
+            DetalleItem(titulo: 'Creado por', contenido: data['creadoPor']),
           ],
         ),
       ),
+    );
+  }
+}
+
+class DetalleItem extends StatelessWidget {
+  final String titulo;
+  final dynamic contenido;
+
+  DetalleItem({required this.titulo, required this.contenido});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text(titulo),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(contenido),
+        ),
+      ],
     );
   }
 }
