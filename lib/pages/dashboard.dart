@@ -1,3 +1,4 @@
+import 'package:banco_alimentos/pages/crearTarea.dart';
 import 'package:banco_alimentos/pages/entradas.dart';
 import 'package:banco_alimentos/pages/tareasFinalizadas.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +138,17 @@ class _DashboardPageState extends State<DashboardPage> {
                           const SizedBox(width: 10.0),
                           _buildDashboardButton(CupertinoIcons.hand_raised, iconColor: Colors.black),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.pencil, iconColor: Colors.black),
+                          _buildDashboardButton(
+                            CupertinoIcons.pencil,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CrearTareaPage()),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ],

@@ -187,20 +187,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                         rows: [
                           DataRow(cells: [
-                            DataCell(Text('Proveedor1')),
-                            DataCell(Text('Cantidad1')),
+                            DataCell(Text('Tarea1')),
+                            DataCell(Text('Baja')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('Proveedor2')),
-                            DataCell(Text('Cantidad2')),
+                            DataCell(Text('Tarea2')),
+                            DataCell(Text('Baja')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('Proveedor3')),
-                            DataCell(Text('Cantidad3')),
+                            DataCell(Text('Tarea3')),
+                            DataCell(Text('Media')),
                           ]),
                           DataRow(cells: [
-                            DataCell(Text('Proveedor4')),
-                            DataCell(Text('Cantidad4')),
+                            DataCell(Text('Tarea4')),
+                            DataCell(Text('Alta')),
                           ]),
                           // Agregar más filas según sea necesario
                         ],
