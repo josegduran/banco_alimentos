@@ -112,7 +112,7 @@ class _CrearTareaPageState extends State<CrearTareaPage> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_validateForm()) {
-                      final currentRowCount = await UserSheetsApi.getRowCount();
+                      final currentRowCount = await creaTareaController.getRowCount();
                       print('Current ID:');
                       print(currentRowCount);
                       final newId = currentRowCount + 1;
@@ -135,9 +135,10 @@ class _CrearTareaPageState extends State<CrearTareaPage> {
                         UserFields.fechaAceptacion: 'Pendiente',
                         UserFields.fechaFinalizacion: 'Pendiente',
                       };
+                      print('Datos a insertar:');
                       print(user);
+                      await creaTareaController.insert([user]);
 
-                      await UserSheetsApi.insert([user]);
 
                       // Limpiar formulario
                       _clearForm();

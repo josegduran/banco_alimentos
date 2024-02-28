@@ -3,10 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'pages/dashboard.dart';
 import 'controllers/entradasController.dart';
+import 'controllers/crearTareaController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserSheetsApi.init();
+  await creaTareaController.init();
   runApp(const MyApp());
 }
 

@@ -1,7 +1,7 @@
 import 'package:banco_alimentos/models/crearTareaModel.dart';
 import 'package:gsheets/gsheets.dart';
-
-class UserSheetsApi {
+// Conectar con el main.dart
+class creaTareaController {
   static const _credentials = r'''
   {
   "type": "service_account",
@@ -20,24 +20,25 @@ class UserSheetsApi {
 
   static final _spreadsheetId = '1SuxsEvDehT-BVc3t_j9iKvmbPgnkoulf8fcqtFqmQLo';
   static final _gsheets = GSheets(_credentials);
-  static Worksheet? _userSheet;
+  static Worksheet? _userSheet2;
 
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'produccion');
+      _userSheet2 = await _getWorkSheet(spreadsheet, title: 'Users');
 
       final firstRow = UserFields.getFields();
-      _userSheet!.values.insertRow(1, firstRow);
+      _userSheet2!.values.insertRow(1, firstRow);
+      print('Inicialización exitosa.');
     } catch (e) {
-      print('Init Error: $e');
+      print('Error en la inicialización: $e');
     }
   }
 
   static Future<Worksheet> _getWorkSheet(
-      Spreadsheet spreadsheet, {
-        required String title,
-      }) async {
+    Spreadsheet spreadsheet, {
+    required String title,
+  }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -46,16 +47,21 @@ class UserSheetsApi {
   }
 
   static Future<int> getRowCount() async {
-    if (_userSheet == null) return 0;
+    if (_userSheet2 == null) return 0;
 
-    final lastRow = await _userSheet!.values.lastRow();
+    final lastRow = await _userSheet2!.values.lastRow();
     final firstCellValue = lastRow?.first;
     return int.tryParse(firstCellValue ?? '0') ?? 0;
   }
 
   static Future insert(List<Map<String, dynamic>> rowList) async {
-    if (_userSheet == null) return;
+    if (_userSheet2 == null) return;
 
-    _userSheet!.values.map.appendRows(rowList);
+    try {
+      _userSheet2!.values.map.appendRows(rowList);
+      print('Inserción exitosa.');
+    } catch (e) {
+      print('Error en la inserción: $e');
+    }
   }
 }
