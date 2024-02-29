@@ -1,7 +1,7 @@
 import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:gsheets/gsheets.dart';
 
-class UserSheetsApi {
+class entradasController {
   static const _credentials = r'''
   {
   "type": "service_account",

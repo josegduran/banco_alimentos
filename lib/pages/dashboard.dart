@@ -136,8 +136,6 @@ class _DashboardPageState extends State<DashboardPage> {
                         children: [
                           _buildDashboardButton(CupertinoIcons.question_circle, iconColor: Colors.black),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.hand_raised, iconColor: Colors.black),
-                          const SizedBox(width: 10.0),
                           _buildDashboardButton(
                             CupertinoIcons.pencil,
                             iconColor: Colors.black,

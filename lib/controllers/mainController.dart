@@ -1,7 +1,7 @@
 import 'package:banco_alimentos/models/mainModel.dart';
 import 'package:gsheets/gsheets.dart';
 
-class UserSheetsApi {
+class mainController {
   static const _credentials = r'''
   {
   "type": "service_account",
@@ -68,7 +68,7 @@ class UserSheetsApi {
     // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
     final filteredRows = values.where((row) {
       final rowData = Map<String, dynamic>.fromIterables(headers, row);
-      return rowData['estado'] == 'pendiente';
+      return rowData['estado'] == 'Pendiente';
     }).toList();
 
     // Convertir las filas de valores filtradas en una lista de mapas
@@ -83,26 +83,36 @@ class UserSheetsApi {
     return rows;
   }
 
-
-  static Future<bool> updateCell({
+  static Future<bool> updateEstado({
     required int id,
     required String key,
     required dynamic value,
-  }) async{
+  }) async {
     if (_userSheet == null) return false;
 
-    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
-
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
   }
 
+  static Future<bool> updateColaborador({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async {
+    if (_userSheet == null) return false;
 
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
 
+  static Future<bool> updateFechaAceptacion({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async {
+    if (_userSheet == null) return false;
 
-
-
-
-
-
-
-
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
 }

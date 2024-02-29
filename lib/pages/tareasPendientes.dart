@@ -169,7 +169,6 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
 
                               Navigator.pushReplacementNamed(context, '/');
                             },
-
                             child: Text('Aceptar'),
                           ),
                         ],
@@ -205,8 +204,11 @@ class TareaDetallesPage extends StatelessWidget {
           children: [
             DetalleItem(titulo: 'Nombre', contenido: data['nombre']),
             DetalleItem(titulo: 'Descripción', contenido: data['descripcion']),
-            DetalleItem(titulo: 'Fecha de creación', contenido: data['fechaCreacion']),
-            DetalleItem(titulo: 'Fecha de vencimiento', contenido: data['fechaVencimiento']),
+            DetalleItem(
+                titulo: 'Fecha de creación', contenido: data['fechaCreacion']),
+            DetalleItem(
+                titulo: 'Fecha de vencimiento',
+                contenido: data['fechaVencimiento']),
             DetalleItem(titulo: 'Prioridad', contenido: data['prioridad']),
             DetalleItem(titulo: 'Estado', contenido: data['estado']),
             DetalleItem(titulo: 'Aceptado por', contenido: data['aceptadoPor']),

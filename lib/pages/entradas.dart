@@ -199,7 +199,7 @@ class _EntradasPageState extends State<EntradasPage> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_validateForm()) {
-                      final currentRowCount = await UserSheetsApi.getRowCount();
+                      final currentRowCount = await entradasController.getRowCount();
                       final newId = currentRowCount + 1;
 
                       // Obtener la fecha y hora actuales
@@ -219,7 +219,7 @@ class _EntradasPageState extends State<EntradasPage> {
                         UserFields.quienRegistro: colaboradorSeleccionado,
                       };
 
-                      await UserSheetsApi.insert([user]);
+                      await entradasController.insert([user]);
 
                       // Limpiar formulario
                       _clearForm();
