@@ -217,6 +217,8 @@ class _EntradasPageState extends State<EntradasPage> {
                         UserFields.inspeccion: estadoSeleccionado,
                         UserFields.ubicacionAlmacen: lugarSeleccionado,
                         UserFields.quienRegistro: colaboradorSeleccionado,
+                        UserFields.estado: 'Finalizada',
+                        UserFields.revisadoPor: 'Pendiente',
                       };
 
                       await entradasController.insert([user]);

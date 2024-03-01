@@ -10,6 +10,8 @@ class UserFields {
   static final String inspeccion = 'inspeccion';
   static final String ubicacionAlmacen = 'ubicacionAlmacen';
   static final String quienRegistro = 'quienRegistro';
+  static final String estado = 'estado';
+  static final String revisadoPor = 'revisadoPor';
 
   static List<String> getFields() => [id];
 }
