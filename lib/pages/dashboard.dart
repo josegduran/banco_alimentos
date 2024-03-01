@@ -1,6 +1,6 @@
 import 'package:banco_alimentos/pages/crearTarea.dart';
 import 'package:banco_alimentos/pages/entradas.dart';
-import 'package:banco_alimentos/pages/tareasFinalizadas.dart';
+import 'package:banco_alimentos/pages/operacionesFinalizadas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -103,7 +103,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TareasFinalizadasPage()),
+                                MaterialPageRoute(builder: (context) => OperacionesFinalizadasPage()),
                               );
                             },
                           ),

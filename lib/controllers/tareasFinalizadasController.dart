@@ -1,7 +1,8 @@
 import 'package:banco_alimentos/models/tareasFinalizadasModel.dart';
+//import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:gsheets/gsheets.dart';
 
-class UserSheetsApi {
+class tareasFinalizadasController {
   static const _credentials = r'''
   {
   "type": "service_account",

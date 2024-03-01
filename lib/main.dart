@@ -4,13 +4,17 @@ import 'dart:async';
 import 'pages/dashboard.dart';
 import 'controllers/entradasController.dart';
 import 'controllers/crearTareaController.dart';
+import 'controllers/tareasFinalizadasController.dart';
 import 'controllers/mainController.dart';
+import 'controllers/entradasFinalizadasController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await entradasController.init();
   await creaTareaController.init();
+  await tareasFinalizadasController.init();
   await mainController.init();
+  await entradasFinalizadasController.init();
   runApp(const MyApp());
 }
 

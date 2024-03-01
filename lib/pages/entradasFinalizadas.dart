@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import 'package:banco_alimentos/controllers/tareasFinalizadasController.dart';
+import 'package:banco_alimentos/controllers/entradasFinalizadasController.dart';
 
-class TareasFinalizadasPage extends StatefulWidget {
+class EntradasFinalizadasPage extends StatefulWidget {
   @override
-  _TareasFinalizadasPageState createState() => _TareasFinalizadasPageState();
+  _EntradasFinalizadasPageState createState() => _EntradasFinalizadasPageState();
 }
 
-class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
+class _EntradasFinalizadasPageState extends State<EntradasFinalizadasPage> {
   Timer? _inactivityTimer;
 
   @override
@@ -32,7 +32,7 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tareas Finalizadas', style: GoogleFonts.montserrat()),
+        title: Text('Entregas Finalizadas', style: GoogleFonts.montserrat()),
       ),
       body: GestureDetector(
         onTap: () {
@@ -66,18 +66,18 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final data = await tareasFinalizadasController.readAllRows();
+    final data = await entradasFinalizadasController.readAllRows();
     return data;
   }
 
   Widget buildDataTable(List<Map<String, dynamic>> data) {
     if (data.isEmpty) {
-      return Text('No hay tareas finalizadas.');
+      return Text('No hay entregas finalizadas.');
     } else {
       return DataTable(
         columns: [
-          DataColumn(label: Text('Nombre')),
-          DataColumn(label: Text('Operador')),
+          DataColumn(label: Text('Producto')),
+          DataColumn(label: Text('Proveedor')),
           DataColumn(label: Text('Acción')),
         ],
         rows: data.map<DataRow>((rowData) {
@@ -94,7 +94,7 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
                       ),
                     );
                   },
-                  child: Text(rowData['nombre'] ?? ''),
+                  child: Text(rowData['nombreProducto'] ?? ''),
                 ),
               ),
               DataCell(
@@ -108,7 +108,7 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
                       ),
                     );
                   },
-                  child: Text(rowData['aceptadoPor'] ?? ''),
+                  child: Text(rowData['proveedor'] ?? ''),
                 ),
               ),
               DataCell(ElevatedButton(
@@ -123,7 +123,7 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
                       return AlertDialog(
                         title: Text('Confirmación'),
                         content: Text(
-                            '¿Estás seguro de que quieres revisar esta tarea?'),
+                            '¿Estás seguro de que quieres revisar esta entrega?'),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -139,14 +139,14 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
                                   'Aceptar clicado para la tarea con ID: $taskId');
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
-                                await tareasFinalizadasController.updateEstado(
+                                await entradasFinalizadasController.updateEstado(
                                   id: taskId,
                                   key: 'estado',
                                   value: 'Revisado',
                                 );
 
                                 // Después de confirmar, actualizar el estado
-                                await tareasFinalizadasController.updateColaborador(
+                                await entradasFinalizadasController.updateColaborador(
                                   id: taskId,
                                   key: 'revisadoPor',
                                   value: 'Supervisor',
@@ -156,7 +156,7 @@ class _TareasFinalizadasPageState extends State<TareasFinalizadasPage> {
                               // Mostrar un mensaje de tarea aceptada
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Tarea Revisada'),
+                                  content: Text('Entrega Revisada'),
                                 ),
                               );
 
@@ -188,25 +188,25 @@ class TareaDetallesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de la tarea'),
+        title: Text('Detalles de la entrega'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DetalleItem(titulo: 'Nombre', contenido: data['nombre']),
-            DetalleItem(titulo: 'Descripción', contenido: data['descripcion']),
-            DetalleItem(
-                titulo: 'Fecha de creación', contenido: data['fechaCreacion']),
-            DetalleItem(
-                titulo: 'Fecha de vencimiento',
-                contenido: data['fechaVencimiento']),
-            DetalleItem(titulo: 'Prioridad', contenido: data['prioridad']),
+            DetalleItem(titulo: 'Numero de lote', contenido: data['numeroLote']),
+            DetalleItem(titulo: 'Fecha de recepción', contenido: data['fechaRecepcion']),
+            DetalleItem(titulo: 'Proveedor', contenido: data['proveedor']),
+            DetalleItem(titulo: 'Nombre del producto', contenido: data['nombreProducto']),
+            DetalleItem(titulo: 'cantidad recibida', contenido: data['cantidadRecibida']),
+            DetalleItem(titulo: 'Fecha de fabricación', contenido: data['fechaFabricacion']),
+            DetalleItem(titulo: 'Fecha de caducidad', contenido: data['fechaCaducidad']),
+            DetalleItem(titulo: 'Inspección', contenido: data['inspeccion']),
+            DetalleItem(titulo: 'Ubicación', contenido: data['ubicacionAlmacen']),
+            DetalleItem(titulo: 'Quién registró', contenido: data['quienRegistro']),
             DetalleItem(titulo: 'Estado', contenido: data['estado']),
-            DetalleItem(titulo: 'Aceptado por', contenido: data['aceptadoPor']),
-            DetalleItem(titulo: 'Comentarios', contenido: data['comentarios']),
-            DetalleItem(titulo: 'Creado por', contenido: data['creadoPor']),
+            DetalleItem(titulo: 'Revisado por', contenido: data['revisadoPor']),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
-import 'package:banco_alimentos/models/crearTareaModel.dart';
+import 'package:banco_alimentos/models/entradasFinalizadasModel.dart';
 import 'package:gsheets/gsheets.dart';
-// Conectar con el main.dart
-class creaTareaController {
+
+class entradasFinalizadasController {
   static const _credentials = r'''
   {
   "type": "service_account",
@@ -25,20 +25,19 @@ class creaTareaController {
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'produccion');
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'entradas');
 
       final firstRow = UserFields.getFields();
       _userSheet!.values.insertRow(1, firstRow);
-      print('Inicialización exitosa.');
     } catch (e) {
-      print('Error en la inicialización: $e');
+      print('Init Error: $e');
     }
   }
 
   static Future<Worksheet> _getWorkSheet(
-    Spreadsheet spreadsheet, {
-    required String title,
-  }) async {
+      Spreadsheet spreadsheet, {
+        required String title,
+      }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -57,11 +56,60 @@ class creaTareaController {
   static Future insert(List<Map<String, dynamic>> rowList) async {
     if (_userSheet == null) return;
 
-    try {
-      _userSheet!.values.map.appendRows(rowList);
-      print('Inserción exitosa.');
-    } catch (e) {
-      print('Error en la inserción: $e');
-    }
+    _userSheet!.values.map.appendRows(rowList);
   }
+
+  static Future<List<Map<String, dynamic>>> readAllRows() async {
+    if (_userSheet == null) return [];
+
+    final values = await _userSheet!.values.allRows();
+    final headers = UserFields.getFields();
+
+    // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
+    final filteredRows = values.where((row) {
+      final rowData = Map<String, dynamic>.fromIterables(headers, row);
+      return rowData['estado'] == 'Finalizada';
+    }).toList();
+
+    // Convertir las filas de valores filtradas en una lista de mapas
+    final rows = filteredRows.map((row) {
+      Map<String, dynamic> rowData = {};
+      for (int i = 0; i < headers.length; i++) {
+        rowData[headers[i]] = row[i];
+      }
+      return rowData;
+    }).toList();
+
+    return rows;
+  }
+
+
+  static Future<bool> updateEstado({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async{
+    if (_userSheet == null) return false;
+
+    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
+
+  static Future<bool> updateColaborador({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async{
+    if (_userSheet == null) return false;
+
+    return _userSheet!.values.insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
+
+
+
+
+
+
+
+
+
 }
