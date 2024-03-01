@@ -1,4 +1,5 @@
 // System
+import 'package:banco_alimentos/pages/catalogoProductos.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
@@ -64,6 +65,31 @@ class _EntradasPageState extends State<EntradasPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    final selectedProduct = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CatalogoProductosPage(),
+                      ),
+                    );
+
+                    if (selectedProduct != null) {
+                      setState(() {
+                        productoSeleccionado = selectedProduct;
+                      });
+                    }
+                  },
+                  child: Text('Buscar Producto'),
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  controller: TextEditingController(text: productoSeleccionado),
+                  readOnly: true,
+                  decoration: InputDecoration(labelText: 'Producto'),
+                ),
+
+                SizedBox(height: 16),
                 TextFormField(
                   controller: loteController,
                   keyboardType: TextInputType.number,
@@ -84,22 +110,6 @@ class _EntradasPageState extends State<EntradasPage> {
                     );
                   }).toList(),
                   decoration: InputDecoration(labelText: 'Proveedor'),
-                ),
-                SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: productoSeleccionado,
-                  onChanged: (String? value) {
-                    setState(() {
-                      productoSeleccionado = value;
-                    });
-                  },
-                  items: productos.map((producto) {
-                    return DropdownMenuItem(
-                      value: producto,
-                      child: Text(producto),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(labelText: 'Producto'),
                 ),
                 SizedBox(height: 16),
                 TextFormField(
