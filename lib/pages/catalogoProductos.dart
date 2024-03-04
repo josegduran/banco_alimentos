@@ -1,4 +1,11 @@
+// System
 import 'package:flutter/material.dart';
+
+// Controllers
+import 'package:banco_alimentos/controllers/catalogoProductosController.dart';
+
+// Models
+import 'package:banco_alimentos/models/catalogoProductosModel.dart';
 
 class CatalogoProductosPage extends StatefulWidget {
   @override
@@ -6,22 +13,30 @@ class CatalogoProductosPage extends StatefulWidget {
 }
 
 class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
-  final List<String> allProducts = ['Product 1', 'Product 2', 'Product 3', 'Product 4', 'Product 5'];
-  List<String> displayedProducts = [];
+  List<Productos> allProducts = [];
+  List<Productos> displayedProducts = [];
 
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    displayedProducts.addAll(allProducts);
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    final products = await catalogoProductosController.readAllRows();
+    setState(() {
+      allProducts = products;
+      displayedProducts = products;
+    });
   }
 
   void _filterProducts(String query) {
     query = query.toLowerCase();
     setState(() {
       displayedProducts = allProducts
-          .where((product) => product.toLowerCase().contains(query))
+          .where((product) => product.nombre.toLowerCase().contains(query))
           .toList();
     });
   }
@@ -61,7 +76,7 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                       Navigator.pop(context, displayedProducts[index]);
                     },
                     child: Center(
-                      child: Text(displayedProducts[index]),
+                      child: Text(displayedProducts[index].nombre),
                     ),
                   ),
                 );
@@ -73,4 +88,3 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
     );
   }
 }
-

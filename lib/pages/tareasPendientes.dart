@@ -66,8 +66,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    await UserSheetsApi.init();
-    final data = await UserSheetsApi.readAllRows();
+    final data = await tareasPendientesController.readAllRows();
     return data;
   }
 
@@ -140,20 +139,20 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
 
                               if (taskId != null) {
                                 // Después de confirmar, actualizar el estado
-                                await UserSheetsApi.updateEstado(
+                                await tareasPendientesController.updateEstado(
                                   id: taskId,
                                   key: 'estado',
                                   value: 'En Proceso',
                                 );
 
                                 // Después de confirmar, actualizar el estado
-                                await UserSheetsApi.updateColaborador(
+                                await tareasPendientesController.updateColaborador(
                                   id: taskId,
                                   key: 'aceptadoPor',
                                   value: 'José G. Durán',
                                 );
 
-                                await UserSheetsApi.updateFechaAceptacion(
+                                await tareasPendientesController.updateFechaAceptacion(
                                   id: taskId,
                                   key: 'fechaAceptacion',
                                   value: fechaActual.toLocal().toString(),

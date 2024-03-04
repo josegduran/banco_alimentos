@@ -1,7 +1,7 @@
-import 'package:banco_alimentos/models/tareasPendientesModel.dart';
+import 'package:banco_alimentos/models/catalogoProductosModel.dart';
 import 'package:gsheets/gsheets.dart';
 
-class tareasPendientesController {
+class catalogoProductosController {
   static const _credentials = r'''
   {
   "type": "service_account",
@@ -25,9 +25,9 @@ class tareasPendientesController {
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'produccion');
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'catalogo.productos');
 
-      final firstRow = UserFields.getFields();
+      final firstRow = Productos.getFields();
       _userSheet!.values.insertRow(1, firstRow);
     } catch (e) {
       print('Init Error: $e');
@@ -35,9 +35,9 @@ class tareasPendientesController {
   }
 
   static Future<Worksheet> _getWorkSheet(
-    Spreadsheet spreadsheet, {
-    required String title,
-  }) async {
+      Spreadsheet spreadsheet, {
+        required String title,
+      }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -59,28 +59,21 @@ class tareasPendientesController {
     _userSheet!.values.map.appendRows(rowList);
   }
 
-  static Future<List<Map<String, dynamic>>> readAllRows() async {
+  static Future<List<Productos>> readAllRows() async {
     if (_userSheet == null) return [];
 
     final values = await _userSheet!.values.allRows();
-    final headers = UserFields.getFields();
+    final headers = Productos.getFields();
 
-    // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
-    final filteredRows = values.where((row) {
-      final rowData = Map<String, dynamic>.fromIterables(headers, row);
-      return rowData['estado'] == 'Pendiente';
-    }).toList();
-
-    // Convertir las filas de valores filtradas en una lista de mapas
-    final rows = filteredRows.map((row) {
+    final products = values.map((row) {
       Map<String, dynamic> rowData = {};
       for (int i = 0; i < headers.length; i++) {
         rowData[headers[i]] = row[i];
       }
-      return rowData;
+      return Productos.fromMap(rowData); // Utiliza un constructor en tu modelo para crear una instancia
     }).toList();
 
-    return rows;
+    return products;
   }
 
   static Future<bool> updateEstado({

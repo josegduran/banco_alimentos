@@ -7,6 +7,8 @@ import 'controllers/crearTareaController.dart';
 import 'controllers/tareasFinalizadasController.dart';
 import 'controllers/mainController.dart';
 import 'controllers/entradasFinalizadasController.dart';
+import 'controllers/tareasPendientesController.dart';
+import 'controllers/catalogoProductosController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,8 @@ void main() async {
   await tareasFinalizadasController.init();
   await mainController.init();
   await entradasFinalizadasController.init();
+  await tareasPendientesController.init();
+  await catalogoProductosController.init();
   runApp(const MyApp());
 }
 
