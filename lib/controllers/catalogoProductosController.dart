@@ -25,7 +25,8 @@ class catalogoProductosController {
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet = await _getWorkSheet(spreadsheet, title: 'catalogo.productos');
+      _userSheet =
+          await _getWorkSheet(spreadsheet, title: 'catalogo.productos');
 
       final firstRow = Productos.getFields();
       _userSheet!.values.insertRow(1, firstRow);
@@ -35,9 +36,9 @@ class catalogoProductosController {
   }
 
   static Future<Worksheet> _getWorkSheet(
-      Spreadsheet spreadsheet, {
-        required String title,
-      }) async {
+    Spreadsheet spreadsheet, {
+    required String title,
+  }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -53,12 +54,6 @@ class catalogoProductosController {
     return int.tryParse(firstCellValue ?? '0') ?? 0;
   }
 
-  static Future insert(List<Map<String, dynamic>> rowList) async {
-    if (_userSheet == null) return;
-
-    _userSheet!.values.map.appendRows(rowList);
-  }
-
   static Future<List<Productos>> readAllRows() async {
     if (_userSheet == null) return [];
 
@@ -70,42 +65,13 @@ class catalogoProductosController {
       for (int i = 0; i < headers.length; i++) {
         rowData[headers[i]] = row[i];
       }
-      return Productos.fromMap(rowData); // Utiliza un constructor en tu modelo para crear una instancia
+      return Productos.fromMap(rowData);
     }).toList();
+
+    // Remove the first element (header row)
+    products.removeAt(0);
 
     return products;
   }
 
-  static Future<bool> updateEstado({
-    required int id,
-    required String key,
-    required dynamic value,
-  }) async {
-    if (_userSheet == null) return false;
-
-    return _userSheet!.values
-        .insertValueByKeys(value, columnKey: key, rowKey: id);
-  }
-
-  static Future<bool> updateColaborador({
-    required int id,
-    required String key,
-    required dynamic value,
-  }) async {
-    if (_userSheet == null) return false;
-
-    return _userSheet!.values
-        .insertValueByKeys(value, columnKey: key, rowKey: id);
-  }
-
-  static Future<bool> updateFechaAceptacion({
-    required int id,
-    required String key,
-    required dynamic value,
-  }) async {
-    if (_userSheet == null) return false;
-
-    return _userSheet!.values
-        .insertValueByKeys(value, columnKey: key, rowKey: id);
-  }
 }
