@@ -15,7 +15,8 @@ class Productos {
     required this.estado,
   });
 
-  static List<String> getFields() => ['id', 'nombre', 'categoria', 'prioridad', 'imagen', 'estado'];
+  static List<String> getFields() =>
+      ['id', 'nombre', 'categoria', 'prioridad', 'imagen', 'estado'];
 
   // Factory method to create an instance from a map
   factory Productos.fromMap(Map<String, dynamic> map) {

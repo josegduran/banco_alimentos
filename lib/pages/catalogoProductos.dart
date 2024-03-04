@@ -81,10 +81,11 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                         Image.network(
                           displayedProducts[index].imagen,
                           height: 100, // Set the desired height for the image
-                          width: 100,  // Set the desired width for the image
+                          width: 100, // Set the desired width for the image
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(height: 8.0), // Add some spacing between image and text
+                        SizedBox(height: 8.0),
+                        // Add some spacing between image and text
                         Text(
                           displayedProducts[index].nombre,
                           textAlign: TextAlign.center,
@@ -95,7 +96,6 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                 );
               },
             ),
-
           ),
         ],
       ),

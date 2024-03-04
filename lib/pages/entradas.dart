@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:banco_alimentos/controllers/entradasController.dart';
 import 'package:banco_alimentos/models/entradasModel.dart';
 
-
 class EntradasPage extends StatefulWidget {
   @override
   _EntradasPageState createState() => _EntradasPageState();
@@ -50,7 +49,11 @@ class _EntradasPageState extends State<EntradasPage> {
   List<String> productos = ['Producto 1', 'Producto 2', 'Producto 3'];
   List<String> estados = ['Bueno', 'Aceptable', 'Dudoso', 'Malo'];
   List<String> lugares = ['Almacén A', 'Almacén B', 'Almacén C'];
-  List<String> colaboradores = ['Colaborador 1', 'Colaborador 2', 'Colaborador 3'];
+  List<String> colaboradores = [
+    'Colaborador 1',
+    'Colaborador 2',
+    'Colaborador 3'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +91,6 @@ class _EntradasPageState extends State<EntradasPage> {
                   readOnly: true,
                   decoration: InputDecoration(labelText: 'Producto'),
                 ),
-
                 SizedBox(height: 16),
                 TextFormField(
                   controller: loteController,
@@ -131,10 +133,12 @@ class _EntradasPageState extends State<EntradasPage> {
 
                     if (selectedDate != null) {
                       // Formatea la fecha seleccionada y establece el texto en el controlador
-                      fabricacionController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      fabricacionController.text =
+                          DateFormat('yyyy-MM-dd').format(selectedDate);
                     }
                   },
-                  decoration: InputDecoration(labelText: 'Fecha de Fabricación'),
+                  decoration:
+                      InputDecoration(labelText: 'Fecha de Fabricación'),
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -150,7 +154,8 @@ class _EntradasPageState extends State<EntradasPage> {
 
                     if (selectedDate != null) {
                       // Formatea la fecha seleccionada y establece el texto en el controlador
-                      caducidadController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      caducidadController.text =
+                          DateFormat('yyyy-MM-dd').format(selectedDate);
                     }
                   },
                   decoration: InputDecoration(labelText: 'Fecha de Caducidad'),
@@ -170,7 +175,7 @@ class _EntradasPageState extends State<EntradasPage> {
                     );
                   }).toList(),
                   decoration:
-                  InputDecoration(labelText: 'Estado del Lote o Producto'),
+                      InputDecoration(labelText: 'Estado del Lote o Producto'),
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
@@ -187,7 +192,7 @@ class _EntradasPageState extends State<EntradasPage> {
                     );
                   }).toList(),
                   decoration:
-                  InputDecoration(labelText: 'Lugar de Almacenamiento'),
+                      InputDecoration(labelText: 'Lugar de Almacenamiento'),
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
@@ -203,13 +208,15 @@ class _EntradasPageState extends State<EntradasPage> {
                       child: Text(colaborador),
                     );
                   }).toList(),
-                  decoration: InputDecoration(labelText: 'Colaborador que registra la entrada'),
+                  decoration: InputDecoration(
+                      labelText: 'Colaborador que registra la entrada'),
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     if (_validateForm()) {
-                      final currentRowCount = await entradasController.getRowCount();
+                      final currentRowCount =
+                          await entradasController.getRowCount();
                       final newId = currentRowCount + 1;
 
                       // Obtener la fecha y hora actuales
@@ -218,7 +225,8 @@ class _EntradasPageState extends State<EntradasPage> {
                       final user = {
                         UserFields.id: newId,
                         UserFields.numeroLote: loteController.text,
-                        UserFields.fechaRecepcion: fechaActual.toLocal().toString(),
+                        UserFields.fechaRecepcion:
+                            fechaActual.toLocal().toString(),
                         UserFields.proveedor: proveedorSeleccionado,
                         UserFields.nombreProducto: productoSeleccionado,
                         UserFields.cantidadRecibida: cantidadController.text,
@@ -242,8 +250,6 @@ class _EntradasPageState extends State<EntradasPage> {
                   },
                   child: Text('Agregar Registro'),
                 ),
-
-
               ],
             ),
           ),
