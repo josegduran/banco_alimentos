@@ -3,6 +3,7 @@ import 'package:banco_alimentos/controllers/usuariosController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 
 // Pages
 import 'pages/dashboard.dart';
@@ -190,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 30.0),
               Container(
                 height: 400,
                 width: 300,
@@ -245,11 +246,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   );
                 },
-                child: Text(
-                  'Asistencia',
-                  style: GoogleFonts.montserrat(color: Colors.black),
+                child: Icon(
+                  CupertinoIcons.hand_raised,
+                  color: Colors.black,
                 ),
-              ),
+              )
+
             ],
           ),
         ),
