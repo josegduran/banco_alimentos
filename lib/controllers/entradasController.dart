@@ -1,4 +1,5 @@
 import 'package:banco_alimentos/models/entradasModel.dart';
+
 import 'package:gsheets/gsheets.dart';
 
 class entradasController {
@@ -58,4 +59,46 @@ class entradasController {
 
     _userSheet!.values.map.appendRows(rowList);
   }
+
+  static Future<List<EntradasPorVencer>> readAllRows() async {
+    try {
+      if (_userSheet == null) return [];
+
+      final values = await _userSheet!.values.allRows();
+      final headers = EntradasPorVencer.getFields();
+
+      final products = values
+          .where((row) =>
+      row.isNotEmpty &&
+          row[headers.indexOf('estado')] == 'Finalizada' &&
+          _isDueWithinTwoDays(row[headers.indexOf('fechaCaducidad')]))
+          .map((row) {
+        Map<String, dynamic> rowData = {};
+        for (int i = 0; i < headers.length; i++) {
+          rowData[headers[i]] = row[i];
+        }
+        return EntradasPorVencer.fromMap(rowData);
+      }).toList();
+
+      return products;
+    } catch (e) {
+      print('Error in readAllRows: $e');
+      return [];
+    }
+  }
+
+  static bool _isDueWithinTwoDays(String dateString) {
+    try {
+      DateTime expirationDate = DateTime.parse(dateString);
+      DateTime now = DateTime.now();
+      DateTime twoDaysFromNow = now.add(Duration(days: 4));
+
+      return expirationDate.isBefore(twoDaysFromNow) || expirationDate.isAtSameMomentAs(twoDaysFromNow);
+    } catch (e) {
+      print('Error parsing date: $e');
+      return false;
+    }
+  }
+
+
 }

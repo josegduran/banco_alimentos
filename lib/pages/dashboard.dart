@@ -1,12 +1,21 @@
-import 'package:banco_alimentos/pages/crearTarea.dart';
-import 'package:banco_alimentos/pages/entradas.dart';
-import 'package:banco_alimentos/pages/operacionesFinalizadas.dart';
+// System
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+
+// Pages
 import 'tareasPendientes.dart';
 import 'tareasEnProceso.dart';
+import 'package:banco_alimentos/pages/crearTarea.dart';
+import 'package:banco_alimentos/pages/entradas.dart';
+import 'package:banco_alimentos/pages/operacionesFinalizadas.dart';
+
+// Models
+import 'package:banco_alimentos/models/entradasModel.dart';
+
+// Controllers
+import 'package:banco_alimentos/controllers/entradasController.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -160,20 +169,68 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Future<List<EntradasPorVencer>> fetchDataForCarousel() async {
+    try {
+      final entriesToDisplay = await entradasController.readAllRows();
+
+      print('Datos del carrusel: $entriesToDisplay');
+
+      return entriesToDisplay;
+    } catch (e) {
+      print('Error en fetchDataForCarousel: $e');
+      return [];
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
   Widget _buildCarousel() {
     return Container(
       height: 150.0,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _buildCard('Suministro 567', Colors.redAccent),
-          _buildCard('Suministro 756', Colors.redAccent),
-          _buildCard('Suministro 456', Colors.redAccent),
-          // Agregar más tarjetas según sea necesario
-        ],
+      child: FutureBuilder<List<EntradasPorVencer>>(
+        future: fetchDataForCarousel(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError || snapshot.data == null) {
+            return Text('Error al obtener los datos del carrusel');
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Navegar a la página de detalles al presionar un card del carrusel
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TareaDetallesPage(data: snapshot.data![index]),
+                      ),
+                    );
+                  },
+                  child: _buildCard(snapshot.data![index].nombreProducto, Colors.redAccent),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
+
+
+
 
   Widget _buildCard(String title, Color color) {
     return Container(
@@ -181,6 +238,9 @@ class _DashboardPageState extends State<DashboardPage> {
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Card(
         color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
@@ -193,6 +253,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+
 
   Widget _buildDashboardButton(IconData icon, {Color? iconColor, VoidCallback? onPressed}) {
     return Expanded(
@@ -266,5 +327,61 @@ class _DashboardPageState extends State<DashboardPage> {
   void dispose() {
     _inactivityTimer?.cancel();
     super.dispose();
+  }
+}
+
+class TareaDetallesPage extends StatelessWidget {
+  final EntradasPorVencer data;
+
+  TareaDetallesPage({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles de la entrega'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DetalleItem(titulo: 'Numero de lote', contenido: data.numeroLote),
+            DetalleItem(titulo: 'Fecha de recepción', contenido: data.fechaRecepcion),
+            DetalleItem(titulo: 'Proveedor', contenido: data.proveedor),
+            DetalleItem(titulo: 'Nombre del producto', contenido: data.nombreProducto),
+            DetalleItem(titulo: 'cantidad recibida', contenido: data.cantidadRecibida),
+            DetalleItem(titulo: 'Fecha de fabricación', contenido: data.fechaFabricacion),
+            DetalleItem(titulo: 'Fecha de caducidad', contenido: data.fechaCaducidad),
+            DetalleItem(titulo: 'Inspección', contenido: data.inspeccion),
+            DetalleItem(titulo: 'Ubicación', contenido: data.ubicacionAlmacen),
+            DetalleItem(titulo: 'Quién registró', contenido: data.quienRegistro),
+            DetalleItem(titulo: 'Estado', contenido: data.estado),
+            DetalleItem(titulo: 'Revisado por', contenido: data.revisadoPor),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class DetalleItem extends StatelessWidget {
+  final String titulo;
+  final dynamic contenido;
+
+  DetalleItem({required this.titulo, required this.contenido});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text(titulo),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(contenido),
+        ),
+      ],
+    );
   }
 }
