@@ -238,13 +238,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  // Navigate to the dashboard page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DashboardPage(),
-                    ),
-                  );
                 },
                 child: Icon(
                   CupertinoIcons.hand_raised,
