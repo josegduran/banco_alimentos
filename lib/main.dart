@@ -122,9 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 50.0),
+              SizedBox(height: 10.0),
+              // Sección del semáforo
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -190,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 50.0),
+              SizedBox(height: 10.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: FutureBuilder<List<Map<String, dynamic>>>(
