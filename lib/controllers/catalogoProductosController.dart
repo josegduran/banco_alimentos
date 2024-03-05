@@ -63,7 +63,9 @@ class catalogoProductosController {
     final values = await _userSheet!.values.allRows();
     final headers = Productos.getFields();
 
-    final products = values.map((row) {
+    final products = values
+        .where((row) => row.isNotEmpty && row[headers.indexOf('estado')] == 'Activo')
+        .map((row) {
       Map<String, dynamic> rowData = {};
       for (int i = 0; i < headers.length; i++) {
         rowData[headers[i]] = row[i];
@@ -71,11 +73,11 @@ class catalogoProductosController {
       return Productos.fromMap(rowData);
     }).toList();
 
-    // Remove the first element (header row)
-    products.removeAt(0);
+    // No es necesario remover la primera fila (encabezado) porque ya se filtra
 
     return products;
   }
+
 
   static Future<void> initGoogleDriveAPI() async {
     await GoogleSignIn().signInSilently();
