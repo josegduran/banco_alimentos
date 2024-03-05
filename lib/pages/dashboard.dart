@@ -72,9 +72,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                          'Próximos a vencer', style: GoogleFonts.montserrat()
-                      ),
+                      Text('Próximos a vencer',
+                          style: GoogleFonts.montserrat()),
                       const SizedBox(height: 20.0),
                       _buildCarousel(),
                       const SizedBox(height: 20.0),
@@ -88,7 +87,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TareasPendientesPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TareasPendientesPage()),
                               );
                             },
                           ),
@@ -100,7 +101,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TareasEnProcesoPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TareasEnProcesoPage()),
                               );
                             },
                           ),
@@ -112,7 +115,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => OperacionesFinalizadasPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        OperacionesFinalizadasPage()),
                               );
                             },
                           ),
@@ -129,21 +134,25 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => EntradasPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => EntradasPage()),
                               );
                             },
                           ),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.arrow_up, iconColor: Colors.black),
+                          _buildDashboardButton(CupertinoIcons.arrow_up,
+                              iconColor: Colors.black),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.exclamationmark, iconColor: Colors.black),
+                          _buildDashboardButton(CupertinoIcons.exclamationmark,
+                              iconColor: Colors.black),
                         ],
                       ),
                       const SizedBox(height: 5.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildDashboardButton(CupertinoIcons.question_circle, iconColor: Colors.black),
+                          _buildDashboardButton(CupertinoIcons.question_circle,
+                              iconColor: Colors.black),
                           const SizedBox(width: 10.0),
                           _buildDashboardButton(
                             CupertinoIcons.pencil,
@@ -152,7 +161,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => CrearTareaPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => CrearTareaPage()),
                               );
                             },
                           ),
@@ -182,16 +192,6 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
   Widget _buildCarousel() {
     return Container(
       height: 150.0,
@@ -204,6 +204,10 @@ class _DashboardPageState extends State<DashboardPage> {
             );
           } else if (snapshot.hasError || snapshot.data == null) {
             return Text('Error al obtener los datos del carrusel');
+          } else if (snapshot.data!.isEmpty) {
+            return Center(
+              child: Text('No hay lotes próximos a vencer'),
+            );
           } else {
             return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -211,15 +215,16 @@ class _DashboardPageState extends State<DashboardPage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // Navegar a la página de detalles al presionar un card del carrusel
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TareaDetallesPage(data: snapshot.data![index]),
+                        builder: (context) =>
+                            TareaDetallesPage(data: snapshot.data![index]),
                       ),
                     );
                   },
-                  child: _buildCard(snapshot.data![index].nombreProducto, Colors.redAccent),
+                  child: _buildCard(
+                      snapshot.data![index].nombreProducto, Colors.redAccent),
                 );
               },
             );
@@ -228,8 +233,6 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
-
-
 
 
   Widget _buildCard(String title, Color color) {
@@ -254,8 +257,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-
-  Widget _buildDashboardButton(IconData icon, {Color? iconColor, VoidCallback? onPressed}) {
+  Widget _buildDashboardButton(IconData icon,
+      {Color? iconColor, VoidCallback? onPressed}) {
     return Expanded(
       child: ElevatedButton.icon(
         onPressed: onPressed,
@@ -347,15 +350,22 @@ class TareaDetallesPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DetalleItem(titulo: 'Numero de lote', contenido: data.numeroLote),
-            DetalleItem(titulo: 'Fecha de recepción', contenido: data.fechaRecepcion),
+            DetalleItem(
+                titulo: 'Fecha de recepción', contenido: data.fechaRecepcion),
             DetalleItem(titulo: 'Proveedor', contenido: data.proveedor),
-            DetalleItem(titulo: 'Nombre del producto', contenido: data.nombreProducto),
-            DetalleItem(titulo: 'cantidad recibida', contenido: data.cantidadRecibida),
-            DetalleItem(titulo: 'Fecha de fabricación', contenido: data.fechaFabricacion),
-            DetalleItem(titulo: 'Fecha de caducidad', contenido: data.fechaCaducidad),
+            DetalleItem(
+                titulo: 'Nombre del producto', contenido: data.nombreProducto),
+            DetalleItem(
+                titulo: 'cantidad recibida', contenido: data.cantidadRecibida),
+            DetalleItem(
+                titulo: 'Fecha de fabricación',
+                contenido: data.fechaFabricacion),
+            DetalleItem(
+                titulo: 'Fecha de caducidad', contenido: data.fechaCaducidad),
             DetalleItem(titulo: 'Inspección', contenido: data.inspeccion),
             DetalleItem(titulo: 'Ubicación', contenido: data.ubicacionAlmacen),
-            DetalleItem(titulo: 'Quién registró', contenido: data.quienRegistro),
+            DetalleItem(
+                titulo: 'Quién registró', contenido: data.quienRegistro),
             DetalleItem(titulo: 'Estado', contenido: data.estado),
             DetalleItem(titulo: 'Revisado por', contenido: data.revisadoPor),
           ],
@@ -364,7 +374,6 @@ class TareaDetallesPage extends StatelessWidget {
     );
   }
 }
-
 
 class DetalleItem extends StatelessWidget {
   final String titulo;
