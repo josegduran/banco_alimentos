@@ -58,28 +58,26 @@ class _EntradasPageState extends State<EntradasPage> {
   List<String> estados = ['Bueno', 'Aceptable', 'Dudoso', 'Malo'];
   List<String> lugares = ['Almacén A', 'Almacén B', 'Almacén C'];
 
-  List<Proveedores> ProveedoresActivos = []; // Replace 'Supplier' with your actual supplier class
+  List<Proveedores> ProveedoresActivos =
+      []; // Replace 'Supplier' with your actual supplier class
 
   Future<void> fetchProveedores() async {
     try {
       final data = await catalogoProveedoresController.readAllRows();
 
       setState(() {
-        ProveedoresActivos = data.map((map) => Proveedores.fromMap(map)).toList();
+        ProveedoresActivos =
+            data.map((map) => Proveedores.fromMap(map)).toList();
       });
 
       // Imprimir en la consola
       ProveedoresActivos.forEach((proveedor) {
         print('Proveedor: ${proveedor.nombre}, Estado: ${proveedor.estado}');
       });
-
     } catch (e) {
       print('Error fetching proveedores: $e');
     }
   }
-
-
-
 
   List<String> colaboradores = [
     'Colaborador 1',
@@ -91,7 +89,7 @@ class _EntradasPageState extends State<EntradasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulario de Registro'),
+        title: Text('Registro de entrada'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -147,15 +145,6 @@ class _EntradasPageState extends State<EntradasPage> {
                   }).toList(),
                   decoration: InputDecoration(labelText: 'Proveedor'),
                 ),
-
-
-
-
-
-
-
-
-
                 SizedBox(height: 16),
                 TextFormField(
                   controller: cantidadController,
@@ -291,7 +280,7 @@ class _EntradasPageState extends State<EntradasPage> {
                       _showSuccessDialog();
                     }
                   },
-                  child: Text('Agregar Registro'),
+                  child: Text('Registrar Entrada'),
                 ),
               ],
             ),
