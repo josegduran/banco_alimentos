@@ -1,14 +1,20 @@
+// System
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+
+// Pages
 import 'pages/dashboard.dart';
+
+// Controllers
+import 'controllers/entradasFinalizadasController.dart';
+import 'controllers/tareasPendientesController.dart';
+import 'controllers/catalogoProductosController.dart';
 import 'controllers/entradasController.dart';
 import 'controllers/crearTareaController.dart';
 import 'controllers/tareasFinalizadasController.dart';
 import 'controllers/mainController.dart';
-import 'controllers/entradasFinalizadasController.dart';
-import 'controllers/tareasPendientesController.dart';
-import 'controllers/catalogoProductosController.dart';
+import 'controllers/catalogoProveedoresController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +25,7 @@ void main() async {
   await entradasFinalizadasController.init();
   await tareasPendientesController.init();
   await catalogoProductosController.init();
+  await catalogoProveedoresController.init();
   runApp(const MyApp());
 }
 

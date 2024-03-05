@@ -9,9 +9,11 @@ import 'package:banco_alimentos/pages/catalogoProductos.dart';
 // Models
 import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:banco_alimentos/models/catalogoProductosModel.dart';
+import 'package:banco_alimentos/models/catalogoProveedoresModel.dart';
 
 // Controllers
 import 'package:banco_alimentos/controllers/entradasController.dart';
+import 'package:banco_alimentos/controllers/catalogoProveedoresController.dart';
 
 class EntradasPage extends StatefulWidget {
   @override
@@ -25,6 +27,9 @@ class _EntradasPageState extends State<EntradasPage> {
   void initState() {
     super.initState();
     startInactivityTimer();
+
+    // Cargar proveedores activos al iniciar la página
+    fetchProveedores();
   }
 
   void startInactivityTimer() {
@@ -50,10 +55,32 @@ class _EntradasPageState extends State<EntradasPage> {
   String? lugarSeleccionado;
   String? colaboradorSeleccionado;
 
-  List<String> proveedores = ['Proveedor 1', 'Proveedor 2', 'Proveedor 3'];
-  List<String> productos = ['Producto 1', 'Producto 2', 'Producto 3'];
   List<String> estados = ['Bueno', 'Aceptable', 'Dudoso', 'Malo'];
   List<String> lugares = ['Almacén A', 'Almacén B', 'Almacén C'];
+
+  List<Proveedores> ProveedoresActivos = []; // Replace 'Supplier' with your actual supplier class
+
+  Future<void> fetchProveedores() async {
+    try {
+      final data = await catalogoProveedoresController.readAllRows();
+
+      setState(() {
+        ProveedoresActivos = data.map((map) => Proveedores.fromMap(map)).toList();
+      });
+
+      // Imprimir en la consola
+      ProveedoresActivos.forEach((proveedor) {
+        print('Proveedor: ${proveedor.nombre}, Estado: ${proveedor.estado}');
+      });
+
+    } catch (e) {
+      print('Error fetching proveedores: $e');
+    }
+  }
+
+
+
+
   List<String> colaboradores = [
     'Colaborador 1',
     'Colaborador 2',
@@ -106,20 +133,25 @@ class _EntradasPageState extends State<EntradasPage> {
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: proveedorSeleccionado,
+                  value: proveedorSeleccionado ?? 'Selecciona un proveedor', // Establecer un valor predeterminado único
                   onChanged: (String? value) {
                     setState(() {
                       proveedorSeleccionado = value;
                     });
                   },
-                  items: proveedores.map((proveedor) {
+                  items: ProveedoresActivos.map((proveedor) {
                     return DropdownMenuItem(
-                      value: proveedor,
-                      child: Text(proveedor),
+                      value: proveedor.nombre ?? 'ValorNulo', // Asegurarse de que sea único, incluso si es nulo
+                      child: Text(proveedor.nombre ?? 'SinNombre'), // Asegurarse de que sea único, incluso si es nulo
                     );
                   }).toList(),
                   decoration: InputDecoration(labelText: 'Proveedor'),
                 ),
+
+
+
+
+
                 SizedBox(height: 16),
                 TextFormField(
                   controller: cantidadController,
