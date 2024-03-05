@@ -1,4 +1,4 @@
-class UserFields {
+class Entradas {
   static final String id = 'id';
   static final String numeroLote = 'numeroLote';
   static final String fechaRecepcion = 'fechaRecepcion';

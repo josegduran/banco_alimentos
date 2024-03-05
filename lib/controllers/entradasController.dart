@@ -27,7 +27,7 @@ class entradasController {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
       _userSheet = await _getWorkSheet(spreadsheet, title: 'entradas');
 
-      final firstRow = UserFields.getFields();
+      final firstRow = Entradas.getFields();
       _userSheet!.values.insertRow(1, firstRow);
     } catch (e) {
       print('Init Error: $e');

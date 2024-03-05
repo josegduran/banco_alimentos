@@ -13,9 +13,6 @@ import 'package:banco_alimentos/models/catalogoProductosModel.dart';
 // Controllers
 import 'package:banco_alimentos/controllers/entradasController.dart';
 
-
-
-
 class EntradasPage extends StatefulWidget {
   @override
   _EntradasPageState createState() => _EntradasPageState();
@@ -85,15 +82,16 @@ class _EntradasPageState extends State<EntradasPage> {
                       ),
                     );
 
-                    if (selectedProduct != null && selectedProduct is Productos) {
+                    if (selectedProduct != null &&
+                        selectedProduct is Productos) {
                       setState(() {
-                        productoSeleccionado = selectedProduct.nombre;// Usar el controlador para actualizar el valor
+                        productoSeleccionado = selectedProduct
+                            .nombre; // Usar el controlador para actualizar el valor
                       });
                     }
                   },
                   child: Text('Buscar Producto'),
                 ),
-
                 SizedBox(height: 16),
                 TextFormField(
                   controller: TextEditingController(text: productoSeleccionado),
@@ -232,20 +230,20 @@ class _EntradasPageState extends State<EntradasPage> {
                       DateTime fechaActual = DateTime.now();
 
                       final user = {
-                        UserFields.id: newId,
-                        UserFields.numeroLote: loteController.text,
-                        UserFields.fechaRecepcion:
+                        Entradas.id: newId,
+                        Entradas.numeroLote: loteController.text,
+                        Entradas.fechaRecepcion:
                             fechaActual.toLocal().toString(),
-                        UserFields.proveedor: proveedorSeleccionado,
-                        UserFields.nombreProducto: productoSeleccionado,
-                        UserFields.cantidadRecibida: cantidadController.text,
-                        UserFields.fechaFabricacion: fabricacionController.text,
-                        UserFields.fechaCaducidad: caducidadController.text,
-                        UserFields.inspeccion: estadoSeleccionado,
-                        UserFields.ubicacionAlmacen: lugarSeleccionado,
-                        UserFields.quienRegistro: colaboradorSeleccionado,
-                        UserFields.estado: 'Finalizada',
-                        UserFields.revisadoPor: 'Pendiente',
+                        Entradas.proveedor: proveedorSeleccionado,
+                        Entradas.nombreProducto: productoSeleccionado,
+                        Entradas.cantidadRecibida: cantidadController.text,
+                        Entradas.fechaFabricacion: fabricacionController.text,
+                        Entradas.fechaCaducidad: caducidadController.text,
+                        Entradas.inspeccion: estadoSeleccionado,
+                        Entradas.ubicacionAlmacen: lugarSeleccionado,
+                        Entradas.quienRegistro: colaboradorSeleccionado,
+                        Entradas.estado: 'Finalizada',
+                        Entradas.revisadoPor: 'Pendiente',
                       };
 
                       await entradasController.insert([user]);
