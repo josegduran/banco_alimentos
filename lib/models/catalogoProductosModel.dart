@@ -15,6 +15,7 @@ class Productos {
     required this.estado,
   });
 
+  // Get the list of field names
   static List<String> getFields() =>
       ['id', 'nombre', 'categoria', 'prioridad', 'imagen', 'estado'];
 
@@ -28,5 +29,9 @@ class Productos {
       imagen: map['imagen'] ?? '',
       estado: map['estado'] ?? '',
     );
+  }
+
+  String constructImageUrl() {
+    return 'https://drive.google.com/uc?export=view&id=$imagen';
   }
 }

@@ -1,5 +1,6 @@
-// System
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:typed_data';
 
 // Controllers
 import 'package:banco_alimentos/controllers/catalogoProductosController.dart';
@@ -25,6 +26,7 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
   }
 
   Future<void> _loadProducts() async {
+    await catalogoProductosController.init(); // Initialize Google Drive API
     final products = await catalogoProductosController.readAllRows();
     setState(() {
       allProducts = products;
@@ -45,7 +47,7 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Catalogo de Productos'),
+        title: Text('Catálogo de Productos'),
       ),
       body: Column(
         children: [
@@ -61,12 +63,7 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
+            child: ListView.builder(
               itemCount: displayedProducts.length,
               itemBuilder: (context, index) {
                 return Card(
@@ -78,18 +75,30 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.network(
-                          displayedProducts[index].imagen,
-                          height: 100, // Set the desired height for the image
-                          width: 100, // Set the desired width for the image
-                          fit: BoxFit.cover,
+                        FutureBuilder<Uint8List>(
+                          future: _getImage(displayedProducts[index].constructImageUrl()),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error al cargar la imagen');
+                            } else {
+                              // Imprime la URL en la consola
+                              print('URL de la imagen: https://drive.google.com/uc?export=view&id=${displayedProducts[index].imagen}');
+
+                              return Image.network(
+                                'https://drive.google.com/uc?export=view&id=${displayedProducts[index].imagen}',
+                                fit: BoxFit.cover,
+                              );
+                            }
+                          },
                         ),
                         SizedBox(height: 8.0),
-                        // Add some spacing between image and text
                         Text(
                           displayedProducts[index].nombre,
                           textAlign: TextAlign.center,
                         ),
+                        SizedBox(height: 8.0),
                       ],
                     ),
                   ),
@@ -100,5 +109,23 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
         ],
       ),
     );
+  }
+
+
+
+  Future<Uint8List> _getImage(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else {
+        print('Error al cargar la imagen. Código de estado: ${response.statusCode}');
+        return Uint8List(0); // Otra opción es lanzar una excepción
+      }
+    } catch (e) {
+      print('Error al cargar la imagen: $e');
+      return Uint8List(0); // Otra opción es lanzar una excepción
+    }
   }
 }

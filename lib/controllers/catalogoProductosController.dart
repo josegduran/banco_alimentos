@@ -1,5 +1,7 @@
+// Models
 import 'package:banco_alimentos/models/catalogoProductosModel.dart';
 import 'package:gsheets/gsheets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class catalogoProductosController {
   static const _credentials = r'''
@@ -22,11 +24,12 @@ class catalogoProductosController {
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
 
-  static Future init() async {
+  static Future<void> init() async {
     try {
+      await initGoogleDriveAPI(); // Initialize Google Drive API
+
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
-      _userSheet =
-          await _getWorkSheet(spreadsheet, title: 'catalogo.productos');
+      _userSheet = await _getWorkSheet(spreadsheet, title: 'catalogo.productos');
 
       final firstRow = Productos.getFields();
       _userSheet!.values.insertRow(1, firstRow);
@@ -36,9 +39,9 @@ class catalogoProductosController {
   }
 
   static Future<Worksheet> _getWorkSheet(
-    Spreadsheet spreadsheet, {
-    required String title,
-  }) async {
+      Spreadsheet spreadsheet, {
+        required String title,
+      }) async {
     try {
       return await spreadsheet.addWorksheet(title);
     } catch (e) {
@@ -72,5 +75,9 @@ class catalogoProductosController {
     products.removeAt(0);
 
     return products;
+  }
+
+  static Future<void> initGoogleDriveAPI() async {
+    await GoogleSignIn().signInSilently();
   }
 }
