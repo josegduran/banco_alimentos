@@ -10,10 +10,12 @@ import 'package:banco_alimentos/pages/catalogoProductos.dart';
 import 'package:banco_alimentos/models/entradasModel.dart';
 import 'package:banco_alimentos/models/catalogoProductosModel.dart';
 import 'package:banco_alimentos/models/catalogoProveedoresModel.dart';
+import 'package:banco_alimentos/models/usuariosModel.dart';
 
 // Controllers
 import 'package:banco_alimentos/controllers/entradasController.dart';
 import 'package:banco_alimentos/controllers/catalogoProveedoresController.dart';
+import 'package:banco_alimentos/controllers/usuariosController.dart';
 
 class EntradasPage extends StatefulWidget {
   @override
@@ -30,6 +32,7 @@ class _EntradasPageState extends State<EntradasPage> {
 
     // Cargar proveedores activos al iniciar la página
     fetchProveedores();
+    fetchUsuarios();
   }
 
   void startInactivityTimer() {
@@ -53,13 +56,13 @@ class _EntradasPageState extends State<EntradasPage> {
   String? productoSeleccionado;
   String? estadoSeleccionado;
   String? lugarSeleccionado;
-  String? colaboradorSeleccionado;
+  String? usuarioSeleccionado;
 
   List<String> estados = ['Bueno', 'Aceptable', 'Dudoso', 'Malo'];
   List<String> lugares = ['Almacén A', 'Almacén B', 'Almacén C'];
 
-  List<Proveedores> ProveedoresActivos =
-      []; // Replace 'Supplier' with your actual supplier class
+  List<Proveedores> ProveedoresActivos = [];
+  List<Usuarios> UsuariosActivos = [];
 
   Future<void> fetchProveedores() async {
     try {
@@ -79,11 +82,22 @@ class _EntradasPageState extends State<EntradasPage> {
     }
   }
 
-  List<String> colaboradores = [
-    'Colaborador 1',
-    'Colaborador 2',
-    'Colaborador 3'
-  ];
+  Future<void> fetchUsuarios() async {
+    try {
+      final data = await usuariosController.readAllRows();
+
+      setState(() {
+        UsuariosActivos = data.map((map) => Usuarios.fromMap(map)).toList();
+      });
+
+      // Imprimir en la consola
+      UsuariosActivos.forEach((usuario) {
+        print('Usuario: ${usuario.nombre}, Estado: ${usuario.estado}');
+      });
+    } catch (e) {
+      print('Error fetching proveedores: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,16 +242,16 @@ class _EntradasPageState extends State<EntradasPage> {
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: colaboradorSeleccionado,
+                  value: usuarioSeleccionado,
                   onChanged: (String? value) {
                     setState(() {
-                      colaboradorSeleccionado = value;
+                      usuarioSeleccionado = value;
                     });
                   },
-                  items: colaboradores.map((colaborador) {
+                  items: UsuariosActivos.map((usuario) {
                     return DropdownMenuItem(
-                      value: colaborador,
-                      child: Text(colaborador),
+                      value: usuario.nombreApellido,
+                      child: Text(usuario.nombreApellido ?? 'SinNombre'),
                     );
                   }).toList(),
                   decoration: InputDecoration(
@@ -266,7 +280,7 @@ class _EntradasPageState extends State<EntradasPage> {
                         Entradas.fechaCaducidad: caducidadController.text,
                         Entradas.inspeccion: estadoSeleccionado,
                         Entradas.ubicacionAlmacen: lugarSeleccionado,
-                        Entradas.quienRegistro: colaboradorSeleccionado,
+                        Entradas.quienRegistro: usuarioSeleccionado,
                         Entradas.estado: 'Finalizada',
                         Entradas.revisadoPor: 'Pendiente',
                       };
@@ -300,7 +314,7 @@ class _EntradasPageState extends State<EntradasPage> {
         caducidadController.text.isEmpty ||
         estadoSeleccionado == null ||
         lugarSeleccionado == null ||
-        colaboradorSeleccionado == null) {
+        usuarioSeleccionado == null) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -330,7 +344,7 @@ class _EntradasPageState extends State<EntradasPage> {
       productoSeleccionado = null;
       estadoSeleccionado = null;
       lugarSeleccionado = null;
-      colaboradorSeleccionado = null;
+      usuarioSeleccionado = null;
     });
   }
 

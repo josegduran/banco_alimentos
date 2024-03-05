@@ -1,4 +1,5 @@
 // System
+import 'package:banco_alimentos/controllers/usuariosController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
@@ -26,6 +27,7 @@ void main() async {
   await tareasPendientesController.init();
   await catalogoProductosController.init();
   await catalogoProveedoresController.init();
+  await usuariosController.init();
   runApp(const MyApp());
 }
 
