@@ -133,7 +133,7 @@ class _EntradasPageState extends State<EntradasPage> {
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: proveedorSeleccionado ?? 'Selecciona un proveedor', // Establecer un valor predeterminado único
+                  value: proveedorSeleccionado,
                   onChanged: (String? value) {
                     setState(() {
                       proveedorSeleccionado = value;
@@ -141,12 +141,16 @@ class _EntradasPageState extends State<EntradasPage> {
                   },
                   items: ProveedoresActivos.map((proveedor) {
                     return DropdownMenuItem(
-                      value: proveedor.nombre ?? 'ValorNulo', // Asegurarse de que sea único, incluso si es nulo
-                      child: Text(proveedor.nombre ?? 'SinNombre'), // Asegurarse de que sea único, incluso si es nulo
+                      value: proveedor.nombre,
+                      child: Text(proveedor.nombre ?? 'SinNombre'),
                     );
                   }).toList(),
                   decoration: InputDecoration(labelText: 'Proveedor'),
                 ),
+
+
+
+
 
 
 
