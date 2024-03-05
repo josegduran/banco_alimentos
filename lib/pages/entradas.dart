@@ -59,7 +59,13 @@ class _EntradasPageState extends State<EntradasPage> {
   String? usuarioSeleccionado;
 
   List<String> estados = ['Bueno', 'Aceptable', 'Dudoso', 'Malo'];
-  List<String> lugares = ['Almacén A', 'Almacén B', 'Almacén C'];
+  List<String> lugares = [
+    'Cámara Fría 1',
+    'Cámara Fría 2',
+    'Cámara Fría 2',
+    'Congelador 1',
+    'Congelador 2'
+  ];
 
   List<Proveedores> ProveedoresActivos = [];
   List<Usuarios> UsuariosActivos = [];
