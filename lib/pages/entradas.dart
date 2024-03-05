@@ -1,12 +1,20 @@
 // System
-import 'package:banco_alimentos/pages/catalogoProductos.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 
 // Pages
-import 'package:banco_alimentos/controllers/entradasController.dart';
+import 'package:banco_alimentos/pages/catalogoProductos.dart';
+
+// Models
 import 'package:banco_alimentos/models/entradasModel.dart';
+import 'package:banco_alimentos/models/catalogoProductosModel.dart';
+
+// Controllers
+import 'package:banco_alimentos/controllers/entradasController.dart';
+
+
+
 
 class EntradasPage extends StatefulWidget {
   @override
@@ -77,14 +85,15 @@ class _EntradasPageState extends State<EntradasPage> {
                       ),
                     );
 
-                    if (selectedProduct != null) {
+                    if (selectedProduct != null && selectedProduct is Productos) {
                       setState(() {
-                        productoSeleccionado = selectedProduct;
+                        productoSeleccionado = selectedProduct.nombre;// Usar el controlador para actualizar el valor
                       });
                     }
                   },
                   child: Text('Buscar Producto'),
                 ),
+
                 SizedBox(height: 16),
                 TextFormField(
                   controller: TextEditingController(text: productoSeleccionado),

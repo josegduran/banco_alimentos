@@ -67,9 +67,10 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
               itemCount: displayedProducts.length,
               itemBuilder: (context, index) {
                 return Card(
-                  child: InkWell(
+                  child: // En la clase _CatalogoProductosPageState
+                  InkWell(
                     onTap: () {
-                      // Pass the selected product back to the previous page
+                      // Pasar el producto seleccionado de vuelta a la página anterior
                       Navigator.pop(context, displayedProducts[index]);
                     },
                     child: Column(
@@ -83,9 +84,6 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                             } else if (snapshot.hasError) {
                               return Text('Error al cargar la imagen');
                             } else {
-                              // Imprime la URL en la consola
-                              print('URL de la imagen: https://drive.google.com/uc?export=view&id=${displayedProducts[index].imagen}');
-
                               return Image.network(
                                 'https://drive.google.com/uc?export=view&id=${displayedProducts[index].imagen}',
                                 fit: BoxFit.cover,
@@ -98,10 +96,10 @@ class _CatalogoProductosPageState extends State<CatalogoProductosPage> {
                           displayedProducts[index].nombre,
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 8.0),
                       ],
                     ),
                   ),
+
                 );
               },
             ),
