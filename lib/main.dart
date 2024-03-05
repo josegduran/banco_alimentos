@@ -191,27 +191,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 10.0),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: fetchData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: Container(
-                          padding: EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      return Text('Error al obtener los datos');
-                    } else {
-                      return buildDataTable(snapshot.data!);
-                    }
-                  },
+              Container(
+                height: 400,
+                width: 300,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: fetchData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        } else if (snapshot.hasError || snapshot.data == null) {
+                          return Text('Error al obtener los datos');
+                        } else {
+                          return buildDataTable(snapshot.data!);
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 100.0),
+
+              SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () async {
                   // Navigate to the dashboard page
