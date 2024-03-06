@@ -19,11 +19,24 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
   Usuarios? _selectedUsuario;
   Timer? _inactivityTimer;
 
+  List<Map<String, dynamic>> _tareasPendientes = [];
+
   @override
   void initState() {
     super.initState();
+    _selectedUsuario = null;
     startInactivityTimer();
+    _loadTareasPendientes(); // Llama a esta función en initState
   }
+
+  Future<void> _loadTareasPendientes() async {
+    final data = await tareasPendientesController.readAllRows();
+    setState(() {
+      _tareasPendientes = data;
+    });
+  }
+
+
 
   void startInactivityTimer() {
     _inactivityTimer = Timer(Duration(seconds: 5000), () {
@@ -126,101 +139,119 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                   child: Text(rowData['prioridad'] ?? ''),
                 ),
               ),
-              DataCell(ElevatedButton(
-                onPressed: () {
-                  // Extraer el ID de la tarea
-                  int? taskId = int.tryParse(rowData['id'] ?? '');
+              DataCell(
+                ElevatedButton(
+                  onPressed: () {
+                    // Extraer el ID de la tarea
+                    int? taskId = int.tryParse(rowData['id'] ?? '');
 
-                  // Mostrar un cuadro de diálogo para confirmar la acción
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Confirmación'),
-                        content: Column(
-                          children: [
-                            Text('¿Quién está aceptando la tarea?'),
-                            SizedBox(height: 16),
-                            FutureBuilder<List<Usuarios>>(
-                              future: fetchUsuarios(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError || !snapshot.hasData) {
-                                  return Text('Error al obtener la lista de usuarios');
-                                } else {
-                                  return DropdownButton<Usuarios>(
-                                    items: snapshot.data!.map((usuario) {
-                                      return DropdownMenuItem<Usuarios>(
-                                        value: usuario,
-                                        child: Text(usuario.nombreApellido ?? ''),
+                    // Mostrar un cuadro de diálogo para confirmar la acción
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirmación'),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text('¿Quién está aceptando la tarea?'),
+                                SizedBox(height: 16),
+                                FutureBuilder<List<Usuarios>>(
+                                  future: fetchUsuarios(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (snapshot.hasError || !snapshot.hasData) {
+                                      return Text('Error al obtener la lista de usuarios');
+                                    } else {
+                                      return DropdownButtonFormField<Usuarios>(
+                                        value: _selectedUsuario,
+                                        onChanged: (Usuarios? value) {
+                                          setState(() {
+                                            _selectedUsuario = value;
+                                          });
+                                        },
+                                        items: snapshot.data!.map((usuario) {
+                                          return DropdownMenuItem<Usuarios>(
+                                            value: usuario,
+                                            child: Text(usuario.nombreApellido ?? 'SinNombre'),
+                                          );
+                                        }).toList(),
+                                        decoration: InputDecoration(labelText: 'Usuario'),
                                       );
-                                    }).toList(),
-                                    onChanged: (Usuarios? selectedUsuario) {
-                                      setState(() {
-                                        _selectedUsuario = selectedUsuario;
-                                      });
-                                    },
-                                    value: _selectedUsuario,
+                                  }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Cerrar el cuadro de diálogo y limpiar el usuario seleccionado
+                                setState(() {
+                                  _selectedUsuario = null;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                // Obtener la fecha de hoy
+                                DateTime fechaActual = DateTime.now();
+
+                                if (taskId != null && _selectedUsuario != null) {
+                                  // Después de confirmar, actualizar el estado
+                                  await tareasPendientesController.updateEstado(
+                                    id: taskId,
+                                    key: 'estado',
+                                    value: 'En Proceso',
+                                  );
+
+                                  // Después de confirmar, actualizar el estado
+                                  await tareasPendientesController.updateColaborador(
+                                    id: taskId,
+                                    key: 'aceptadoPor',
+                                    value: _selectedUsuario!.nombreApellido ?? '',
+                                  );
+
+                                  await tareasPendientesController.updateFechaAceptacion(
+                                    id: taskId,
+                                    key: 'fechaAceptacion',
+                                    value: fechaActual.toLocal().toString(),
+                                  );
+
+                                  // Mostrar un mensaje de tarea aceptada
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Tarea Aceptada'),
+                                    ),
+                                  );
+
+                                  Navigator.pushReplacementNamed(context, '/');
+                                } else {
+                                  Navigator.of(context).pop();
+                                  // Mostrar un mensaje de advertencia de que se debe seleccionar un usuario
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Debes seleccionar un usuario para aceptar la tarea.'),
+                                    ),
                                   );
                                 }
                               },
+                              child: Text('Aceptar'),
                             ),
                           ],
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              // Cerrar el cuadro de diálogo
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              // Obtener la fecha de hoy
-                              DateTime fechaActual = DateTime.now();
+                        );
+                      },
+                    );
+                  },
+                  child: Text('Aceptar'),
+                ),
+              ),
 
-                              if (taskId != null && _selectedUsuario != null) {
-                                // Después de confirmar, actualizar el estado
-                                await tareasPendientesController.updateEstado(
-                                  id: taskId,
-                                  key: 'estado',
-                                  value: 'En Proceso',
-                                );
 
-                                // Después de confirmar, actualizar el estado
-                                await tareasPendientesController.updateColaborador(
-                                  id: taskId,
-                                  key: 'aceptadoPor',
-                                  value: _selectedUsuario!.nombreApellido ?? '',
-                                );
-
-                                await tareasPendientesController.updateFechaAceptacion(
-                                  id: taskId,
-                                  key: 'fechaAceptacion',
-                                  value: fechaActual.toLocal().toString(),
-                                );
-                              }
-
-                              // Mostrar un mensaje de tarea aceptada
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Tarea Aceptada'),
-                                ),
-                              );
-
-                              Navigator.pushReplacementNamed(context, '/');
-                            },
-                            child: Text('Aceptar'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Text('Aceptar'),
-              )),
 
             ],
           );
