@@ -62,7 +62,7 @@ class _EntradasPageState extends State<EntradasPage> {
   List<String> lugares = [
     'Cámara Fría 1',
     'Cámara Fría 2',
-    'Cámara Fría 2',
+    'Cámara Fría 3',
     'Congelador 1',
     'Congelador 2'
   ];
