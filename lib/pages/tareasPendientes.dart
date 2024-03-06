@@ -1,7 +1,14 @@
+// System
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+
+// Controllers
 import 'package:banco_alimentos/controllers/tareasPendientesController.dart';
+import 'package:banco_alimentos/controllers/usuariosController.dart';
+
+// Models
+import 'package:banco_alimentos/models/usuariosModel.dart';
 
 class TareasPendientesPage extends StatefulWidget {
   @override
@@ -9,6 +16,7 @@ class TareasPendientesPage extends StatefulWidget {
 }
 
 class _TareasPendientesPageState extends State<TareasPendientesPage> {
+  Usuarios? _selectedUsuario;
   Timer? _inactivityTimer;
 
   @override
@@ -27,6 +35,13 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
     _inactivityTimer?.cancel();
     startInactivityTimer();
   }
+
+  Future<List<Usuarios>> fetchUsuarios() async {
+    final usuariosData = await usuariosController.readAllRows();
+    final usuariosList = usuariosData.map((userData) => Usuarios.fromMap(userData)).toList();
+    return usuariosList;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +137,37 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text('Confirmación'),
-                        content: Text(
-                            '¿Estás seguro de que quieres aceptar esta tarea?'),
+                        content: Column(
+                          children: [
+                            Text('¿Quién está aceptando la tarea?'),
+                            SizedBox(height: 16),
+                            FutureBuilder<List<Usuarios>>(
+                              future: fetchUsuarios(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError || !snapshot.hasData) {
+                                  return Text('Error al obtener la lista de usuarios');
+                                } else {
+                                  return DropdownButton<Usuarios>(
+                                    items: snapshot.data!.map((usuario) {
+                                      return DropdownMenuItem<Usuarios>(
+                                        value: usuario,
+                                        child: Text(usuario.nombreApellido ?? ''),
+                                      );
+                                    }).toList(),
+                                    onChanged: (Usuarios? selectedUsuario) {
+                                      setState(() {
+                                        _selectedUsuario = selectedUsuario;
+                                      });
+                                    },
+                                    value: _selectedUsuario,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -137,7 +181,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                               // Obtener la fecha de hoy
                               DateTime fechaActual = DateTime.now();
 
-                              if (taskId != null) {
+                              if (taskId != null && _selectedUsuario != null) {
                                 // Después de confirmar, actualizar el estado
                                 await tareasPendientesController.updateEstado(
                                   id: taskId,
@@ -149,7 +193,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                                 await tareasPendientesController.updateColaborador(
                                   id: taskId,
                                   key: 'aceptadoPor',
-                                  value: 'José G. Durán',
+                                  value: _selectedUsuario!.nombreApellido ?? '',
                                 );
 
                                 await tareasPendientesController.updateFechaAceptacion(
@@ -177,6 +221,7 @@ class _TareasPendientesPageState extends State<TareasPendientesPage> {
                 },
                 child: Text('Aceptar'),
               )),
+
             ],
           );
         }).toList(),
