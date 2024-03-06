@@ -202,7 +202,7 @@ class TareaDetallesPage extends StatelessWidget {
             DetalleItem(titulo: 'Fecha de recepción', contenido: data['fechaRecepcion']),
             DetalleItem(titulo: 'Proveedor', contenido: data['proveedor']),
             DetalleItem(titulo: 'Nombre del producto', contenido: data['nombreProducto']),
-            DetalleItem(titulo: 'cantidad recibida', contenido: data['cantidadRecibida']),
+            DetalleItem(titulo: 'Cantidad recibida', contenido: data['cantidadRecibida']),
             DetalleItem(titulo: 'Fecha de fabricación', contenido: data['fechaFabricacion']),
             DetalleItem(titulo: 'Fecha de caducidad', contenido: data['fechaCaducidad']),
             DetalleItem(titulo: 'Inspección', contenido: data['inspeccion']),

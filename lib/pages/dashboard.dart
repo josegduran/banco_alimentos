@@ -356,7 +356,7 @@ class TareaDetallesPage extends StatelessWidget {
             DetalleItem(
                 titulo: 'Nombre del producto', contenido: data.nombreProducto),
             DetalleItem(
-                titulo: 'cantidad recibida', contenido: data.cantidadRecibida),
+                titulo: 'Cantidad recibida', contenido: data.cantidadRecibida),
             DetalleItem(
                 titulo: 'Fecha de fabricación',
                 contenido: data.fechaFabricacion),
