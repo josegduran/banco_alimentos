@@ -70,15 +70,15 @@ class entradasController {
       final products = values
           .where((row) =>
       row.isNotEmpty &&
-          row[headers.indexOf('estado')] == 'Finalizada' &&
-          _isDueWithinTwoDays(row[headers.indexOf('fechaCaducidad')]))
+          _isDueWithinFourDays(row[headers.indexOf('fechaCaducidad')]))
           .map((row) {
         Map<String, dynamic> rowData = {};
         for (int i = 0; i < headers.length; i++) {
           rowData[headers[i]] = row[i];
         }
         return EntradasPorVencer.fromMap(rowData);
-      }).toList();
+      })
+          .toList();
 
       return products;
     } catch (e) {
@@ -87,18 +87,24 @@ class entradasController {
     }
   }
 
-  static bool _isDueWithinTwoDays(String dateString) {
+  static bool _isDueWithinFourDays(String dateString) {
     try {
       DateTime expirationDate = DateTime.parse(dateString);
-      DateTime now = DateTime.now();
-      DateTime twoDaysFromNow = now.add(Duration(days: 4));
+      DateTime now = DateTime.now().subtract(Duration(days: 1)); // Restar un día
+      DateTime fourDaysFromNow = now.add(Duration(days: 4));
 
-      return expirationDate.isBefore(twoDaysFromNow) || expirationDate.isAtSameMomentAs(twoDaysFromNow);
+      return expirationDate.isBefore(fourDaysFromNow) && expirationDate.isAfter(now);
     } catch (e) {
       print('Error parsing date: $e');
       return false;
     }
   }
+
+
+
+
+
+
 
 
 }
