@@ -12,6 +12,7 @@ class UserFields {
   static final String revisadoPor = 'revisadoPor';
   static final String fechaAceptacion = 'fechaAceptacion';
   static final String fechaFinalizacion = 'fechaFinalizacion';
+  static final String motivoIncompleta = 'motivoIncompleta';
 
   static List<String> getFields() => [
     id,
@@ -26,6 +27,7 @@ class UserFields {
     creadoPor,
     revisadoPor,
     fechaAceptacion,
-    fechaFinalizacion
+    fechaFinalizacion,
+    motivoIncompleta
   ];
 }

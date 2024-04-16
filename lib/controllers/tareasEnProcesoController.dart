@@ -115,4 +115,15 @@ class UserSheetsApi {
     return _userSheet!.values
         .insertValueByKeys(value, columnKey: key, rowKey: id);
   }
+
+  static Future<bool> updateEstadoIncompleta({
+    required int id,
+    required String key,
+    required dynamic value,
+  }) async {
+    if (_userSheet == null) return false;
+
+    return _userSheet!.values
+        .insertValueByKeys(value, columnKey: key, rowKey: id);
+  }
 }

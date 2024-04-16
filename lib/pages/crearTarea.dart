@@ -134,6 +134,7 @@ class _CrearTareaPageState extends State<CrearTareaPage> {
                         UserFields.revisadoPor: 'Pendiente',
                         UserFields.fechaAceptacion: 'Pendiente',
                         UserFields.fechaFinalizacion: 'Pendiente',
+                        UserFields.motivoIncompleta: 'N/A',
                       };
                       print('Datos a insertar:');
                       print(user);

@@ -116,6 +116,7 @@ class _TareasEnProcesoPageState extends State<TareasEnProcesoPage> {
                 onPressed: () {
                   // Extraer el ID de la tarea
                   int? taskId = int.tryParse(rowData['id'] ?? '');
+                  print(taskId);
 
                   // Mostrar un cuadro de diálogo para confirmar la acción
                   showDialog(
@@ -193,6 +194,7 @@ class TareaDetallesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int? taskId = int.tryParse(data['id'] ?? '');
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalles de la Tarea'),
@@ -222,7 +224,70 @@ class TareaDetallesPage extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
                   onPressed: () {
-                    _showIncompleteDialog(context);
+                    String motivo = '';
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Tarea Incompleta'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Por favor, proporciona el motivo:'),
+                            TextFormField(
+                              // Puedes personalizar este TextFormField según tus necesidades
+                              decoration: InputDecoration(labelText: 'Motivo'),
+                              onChanged: (value) {
+                                // Actualizar la variable motivo cuando cambia el texto del TextFormField
+                                motivo = value;
+                              },
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () async {
+                              // Aquí puedes realizar acciones con el motivo ingresado
+                              // Por ejemplo, imprimirlo en la consola
+                              print('Motivo ingresado: $motivo');
+                              print(taskId);
+
+                              if (taskId != null) {
+                                // Después de confirmar, actualizar el estado
+                                await UserSheetsApi.updateEstadoIncompleta(
+                                  id: taskId,
+                                  key: 'estado',
+                                  value: 'Incompleta',
+                                );
+
+                                await UserSheetsApi.updateEstadoIncompleta(
+                                  id: taskId,
+                                  key: 'motivoIncompleta',
+                                  value: motivo,
+                                );
+                              }
+                              // Mostrar un mensaje de tarea aceptada
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Tarea Incompleta'),
+                                ),
+                              );
+
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Aceptar'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
@@ -238,42 +303,6 @@ class TareaDetallesPage extends StatelessWidget {
     );
   }
 }
-
-void _showIncompleteDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Tarea Incompleta'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Por favor, proporciona el motivo:'),
-          TextFormField(
-            // Puedes personalizar este TextFormField según tus necesidades
-            decoration: InputDecoration(labelText: 'Motivo'),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            // Aquí puedes realizar acciones con el motivo ingresado
-            Navigator.of(context).pop();
-          },
-          child: Text('Aceptar'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancelar'),
-        ),
-      ],
-    ),
-  );
-}
-
 
 class DetalleItem extends StatelessWidget {
   final String titulo;

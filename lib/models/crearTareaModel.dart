@@ -12,6 +12,22 @@ class UserFields {
   static final String revisadoPor = 'revisadoPor';
   static final String fechaAceptacion = 'fechaAceptacion';
   static final String fechaFinalizacion = 'fechaFinalizacion';
+  static final String motivoIncompleta = 'motivoIncompleta';
 
-  static List<String> getFields() => [id, nombre, descripcion, fechaCreacion, fechaVencimiento, prioridad, estado, aceptadoPor, comentarios, creadoPor, revisadoPor, fechaAceptacion, fechaFinalizacion];
+  static List<String> getFields() => [
+        id,
+        nombre,
+        descripcion,
+        fechaCreacion,
+        fechaVencimiento,
+        prioridad,
+        estado,
+        aceptadoPor,
+        comentarios,
+        creadoPor,
+        revisadoPor,
+        fechaAceptacion,
+        fechaFinalizacion,
+        motivoIncompleta
+      ];
 }
