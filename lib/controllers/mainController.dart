@@ -68,7 +68,8 @@ class mainController {
     // Filtrar las filas que tienen 'pendiente' en la columna 'estado'
     final filteredRows = values.where((row) {
       final rowData = Map<String, dynamic>.fromIterables(headers, row);
-      return rowData['estado'] == 'Pendiente';
+      return rowData['estado'] == 'Pendiente' &&
+          _isDueToday(rowData['fechaVencimiento']);
     }).toList();
 
     // Convertir las filas de valores filtradas en una lista de mapas
@@ -82,6 +83,20 @@ class mainController {
 
     return rows;
   }
+
+  static bool _isDueToday(String dateString) {
+    try {
+      DateTime expirationDate = DateTime.parse(dateString);
+      DateTime today = DateTime.now();
+      return expirationDate.year == today.year &&
+          expirationDate.month == today.month &&
+          expirationDate.day == today.day;
+    } catch (e) {
+      print('Error parsing date: $e');
+      return false;
+    }
+  }
+
 
   static Future<bool> updateEstado({
     required int id,

@@ -192,6 +192,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 30.0),
+              // Texto de Tareas pendientes
+              Text(
+                'Tareas pendientes',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               Container(
                 height: 400,
                 width: 300,
@@ -202,7 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: FutureBuilder<List<Map<String, dynamic>>>(
                       future: fetchData(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(
                             child: Container(
                               padding: EdgeInsets.all(16.0),
@@ -220,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
 
-              SizedBox(height: 20.0),
+              SizedBox(height: 5.0),
               ElevatedButton(
                 onPressed: () async {
                   // Navigate to the dashboard page
@@ -237,21 +243,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () async {
-                },
+                onPressed: () async {},
                 child: Icon(
                   CupertinoIcons.hand_raised,
                   color: Colors.black,
                 ),
               )
-
             ],
           ),
         ),
       ),
     );
   }
-
 
   Future<List<Map<String, dynamic>>> fetchData() async {
     return await mainController.readAllRows();
