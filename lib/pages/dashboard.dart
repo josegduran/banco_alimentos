@@ -7,6 +7,7 @@ import 'dart:async';
 // Pages
 import 'tareasPendientes.dart';
 import 'tareasEnProceso.dart';
+import 'tareasIncompletas.dart';
 import 'package:banco_alimentos/pages/crearTarea.dart';
 import 'package:banco_alimentos/pages/entradas.dart';
 import 'package:banco_alimentos/pages/operacionesFinalizadas.dart';
@@ -143,8 +144,18 @@ class _DashboardPageState extends State<DashboardPage> {
                           _buildDashboardButton(CupertinoIcons.arrow_up,
                               iconColor: Colors.black),
                           const SizedBox(width: 10.0),
-                          _buildDashboardButton(CupertinoIcons.exclamationmark,
-                              iconColor: Colors.black),
+                          _buildDashboardButton(
+                            CupertinoIcons.exclamationmark,
+                            iconColor: Colors.black,
+                            onPressed: () {
+                              // Navegar a la página de Tareas Pendientes cuando se presiona el icono del reloj
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TareasIncompletasPage()),
+                              );
+                            },
+                          ),
                         ],
                       ),
                       const SizedBox(height: 5.0),
